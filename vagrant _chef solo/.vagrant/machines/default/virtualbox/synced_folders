@@ -1,1 +1,0 @@
-{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/cygwin/home/abdelm2/devops/devops/vagrant _chef solo","disabled":false},"v-csc-1":{"id":"v-csc-1","guestpath":"/tmp/vagrant-chef/84a53513c6695364968f25697aebdd40/cookbooks","hostpath":"C:/cygwin/home/abdelm2/.berkshelf/vagrant-berkshelf/shelves/berkshelf20150408-32228-1fl1jmg-default","disabled":false}}}
