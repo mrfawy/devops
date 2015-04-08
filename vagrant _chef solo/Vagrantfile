@@ -7,9 +7,19 @@
 # you're doing.
 Vagrant.configure(2) do |config|
   
-  config.vm.box = "hashicorp/precise32"
+  config.vm.box = "hashicorp/precise64"
+  
+  #refer to http://berkshelf.com/
+  config.berkshelf.enabled = true
+
   config.vm.provision "chef_solo" do |chef|
+    chef.add_recipe "apt"    
+    chef.add_recipe "git"
+    chef.add_recipe "vim"
+    chef.add_recipe "python"
     chef.add_recipe "time"
+    
+
   end
 
   

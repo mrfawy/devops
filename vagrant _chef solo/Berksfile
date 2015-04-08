@@ -1,0 +1,12 @@
+source "https://supermarket.chef.io"
+
+
+
+#metadata
+
+cookbook 'git' 
+cookbook 'python'
+cookbook 'apt'
+cookbook 'vim'
+cookbook "time", path: "./cookbooks/time"
+
