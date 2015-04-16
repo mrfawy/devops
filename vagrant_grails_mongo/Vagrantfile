@@ -6,11 +6,17 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure(2) do |config|
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024  
+  end
   
   config.vm.box = "hashicorp/precise64"
+  config.vm.network "forwarded_port", guest: 8080, host: 8008,auto_correct: true
   
   #refer to http://berkshelf.com/
   config.berkshelf.enabled = true
+  config.vm.synced_folder "DashBoard", "/home/vagrant/DashBoard"
 
   config.vm.provision "chef_solo" do |chef|
     chef.add_recipe "apt"    
