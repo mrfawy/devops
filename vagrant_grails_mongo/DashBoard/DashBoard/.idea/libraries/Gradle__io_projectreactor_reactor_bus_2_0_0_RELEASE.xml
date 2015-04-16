@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.projectreactor:reactor-bus:2.0.0.RELEASE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-bus/2.0.0.RELEASE/91071e996c896444c29c1e1dbc7c6c32d2c29037/reactor-bus-2.0.0.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-bus/2.0.0.RELEASE/21c292aefe80ba4009822e67482619fee38d71c9/reactor-bus-2.0.0.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

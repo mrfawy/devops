@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.grails.plugins:scaffolding:3.0.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.grails.plugins/scaffolding/3.0.2/ab809720087be0898e252edd0978eee9ed1125c6/scaffolding-3.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.grails.plugins/scaffolding/3.0.2/2c0af48fe34e948a2bb2521ce24fdf10ba344e13/scaffolding-3.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

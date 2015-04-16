@@ -9,6 +9,8 @@
 include_recipe "zip"
 include_recipe "java"
 
+package ['tmux']
+
 execute "install gvmtool" do
     command "su vagrant -l -c 'curl -s get.gvmtool.net | bash'"
     creates "/tmp/gvmtool"

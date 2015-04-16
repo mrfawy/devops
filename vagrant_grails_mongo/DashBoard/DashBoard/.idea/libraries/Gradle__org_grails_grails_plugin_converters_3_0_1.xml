@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.grails:grails-plugin-converters:3.0.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.grails/grails-plugin-converters/3.0.1/cc5a131c44a19235a935fe07c97ba70281ccab51/grails-plugin-converters-3.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.grails/grails-plugin-converters/3.0.1/1021ff16ba1098975e332153bb53185676f2b4ab/grails-plugin-converters-3.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
