@@ -6,7 +6,7 @@ class HelloController {
     def index() {
         def x=10
         x++
-        settingsService.
+        settingsService.findSettings()
 
 
     }
