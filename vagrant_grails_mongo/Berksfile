@@ -1,0 +1,12 @@
+source "https://supermarket.chef.io"
+
+
+
+#metadata
+
+cookbook 'git'
+cookbook 'apt'
+cookbook 'vim'
+cookbook 'mongodb', '~> 0.16.2'
+cookbook "grails", path: "./cookbooks/grails"
+
