@@ -6,6 +6,7 @@ import com.mongodb.MongoClient
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.FindOneAndReplaceOptions
+import com.mongodb.client.model.Projections
 import com.mongodb.util.JSON
 import grails.core.GrailsApplication
 import grails.transaction.Transactional
@@ -114,7 +115,7 @@ class SettingsService {
     def loadEnvs(){
         MongoDatabase database=loadDataBase();
         MongoCollection<Document> envsCollection=database.getCollection(COLLECTION_ENVS)
-        def cursor= envsCollection.find().iterator()
+        def cursor= envsCollection.find().projection(Projections.excludeId()).iterator()
         def result=[]
         def slurper=new JsonSlurper()
         while(cursor.hasNext()){
@@ -152,7 +153,8 @@ class SettingsService {
     def loadApps(){
         MongoDatabase database=loadDataBase();
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
-        def cursor = appsCollection.find().iterator()
+
+        def cursor = appsCollection.find().projection(Projections.excludeId()).iterator()
         def result=[]
         def slurper=new JsonSlurper()
         while(cursor.hasNext()){
@@ -167,7 +169,8 @@ class SettingsService {
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
-        def cursor = appsCollection.find(query).iterator()
+
+        def cursor = appsCollection.find(query).projection(Projections.excludeId()).iterator()
         def result=[]
         def slurper=new JsonSlurper()
         while(cursor.hasNext()){
@@ -184,7 +187,10 @@ class SettingsService {
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
         query.append("userId",userId)
-        def cursor = stgCollection.find(query).iterator()
+
+
+
+        def cursor = stgCollection.find(query).projection(Projections.excludeId()).iterator()
         def item = cursor.hasNext() ? cursor.next() : null;
         return item
 
