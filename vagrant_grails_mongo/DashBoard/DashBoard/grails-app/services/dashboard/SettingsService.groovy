@@ -32,27 +32,27 @@ import org.bson.Document
  }
 
  //setup envs
- db.envs.insert({name:"DEV"})
- db.envs.insert({name:"ST"})
- db.envs.insert({name:"PT"})
- db.envs.insert({name:"RT"})
+ DBConnectionFactory.envs.insert({name:"DEV"})
+ DBConnectionFactory.envs.insert({name:"ST"})
+ DBConnectionFactory.envs.insert({name:"PT"})
+ DBConnectionFactory.envs.insert({name:"RT"})
 
  //setup apps
- db.envs.insert({name:"dashboard.templates.ME"})
- db.envs.insert({name:"CIL"})
+ DBConnectionFactory.envs.insert({name:"dashboard.templates.ME"})
+ DBConnectionFactory.envs.insert({name:"CIL"})
 
 
  //insert
- db.userSettings.insert({env:"DEV",app:"dashboard.templates.ME",userID:"test",services:[{"name":"BAM","properties":[{"name":"REGION","value":"CICSAA"}]}]})
+ DBConnectionFactory.userSettings.insert({env:"DEV",app:"dashboard.templates.ME",userID:"test",services:[{"name":"BAM","properties":[{"name":"REGION","value":"CICSAA"}]}]})
 
  //load useres belongs to env and app
- db.userSettings.find({env:"DEV",app:"dashboard.templates.ME"})
+ DBConnectionFactory.userSettings.find({env:"DEV",app:"dashboard.templates.ME"})
 
  //load certain service settings
- db.userSettings.find({userID:"test","services.name":"BAM"})
+ DBConnectionFactory.userSettings.find({userID:"test","services.name":"BAM"})
 
  //group by env
- db.userSettings.aggregate(
+ DBConnectionFactory.userSettings.aggregate(
  [
  {
  $group:
@@ -64,7 +64,7 @@ import org.bson.Document
  ]
  )
 
- db.userSettings.aggregate(
+ DBConnectionFactory.userSettings.aggregate(
  [
  {
  $group:
@@ -88,32 +88,17 @@ class SettingsService {
     def COLLECTION_USER_SETTINGSS="userSettings"
 
 
-    def loadMongoClient(){
-        if(mongoClient){
-            return mongoClient
-        }
-        return initMongoClient()
-    }
-    def loadDataBase(){
-        if(!database){
-            def db=grailsApplication.config.getProperty('mongodb.db')
-            mongoClient=loadMongoClient();
-            database=mongoClient.getDatabase(db)
-        }
-        return database
-    }
+    def db
 
-    def initMongoClient() {
-        if (!mongoClient) {
-            def host = grailsApplication.config.getProperty('mongodb.host')
-            def port = grailsApplication.config.getProperty('mongodb.port')
-            mongoClient = new MongoClient(host, port.toInteger());
+    def loadDB(){
+        if(!db){
+            db=DBConnectionFactory.getInstance(grailsApplication)
         }
-        return mongoClient
+        return db.loadDBConnection()
     }
 
     def loadEnvs(){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         MongoCollection<Document> envsCollection=database.getCollection(COLLECTION_ENVS)
         def cursor= envsCollection.find().projection(Projections.excludeId()).iterator()
         def result=[]
@@ -125,33 +110,34 @@ class SettingsService {
         return result
     }
     def addEnvironment( name ){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         MongoCollection<Document> envsCollection=database.getCollection(COLLECTION_ENVS)
-        //db.envs.insert({name:"DEV"})
+        //DBConnectionFactory.envs.insert({name:"DEV"})
         Document doc = new Document("name", name)
-        envsCollection.insertOne(doc);
+        envsCollection.findOneAndReplace(doc,doc, new FindOneAndReplaceOptions(upsert: true))
+
     }
     def removeEnvironment(name){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         MongoCollection<Document> envsCollection=database.getCollection(COLLECTION_ENVS)
         BasicDBObject query = new BasicDBObject("name",name)
         envsCollection.deleteOne(query);
     }
     def addApp( name ){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
-        //db.apps.insert({name:"DEV"})
+        //DBConnectionFactory.apps.insert({name:"DEV"})
         Document doc = new Document("name", name)
-        appsCollection.insertOne(doc);
+        appsCollection.findOneAndReplace(doc,doc, new FindOneAndReplaceOptions(upsert: true))
     }
     def removeApp(name){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
         BasicDBObject query = new BasicDBObject("name",name)
         appsCollection.deleteOne(query);
     }
     def loadApps(){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
 
         def cursor = appsCollection.find().projection(Projections.excludeId()).iterator()
@@ -165,7 +151,7 @@ class SettingsService {
     }
 
     def loadUsers(def env,def app){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
@@ -182,7 +168,7 @@ class SettingsService {
 
 
     def loadUserSettings(env,app,userId) {
-        MongoDatabase database=loadDataBase()
+        MongoDatabase database=loadDB()
         MongoCollection stgCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
@@ -196,7 +182,7 @@ class SettingsService {
 
     }
     def upsertUserSettings(setting){
-        MongoDatabase database=loadDataBase();
+        MongoDatabase database=loadDB()
         def appsCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
 
 
@@ -206,11 +192,10 @@ class SettingsService {
 
         def stgStr=setting as grails.converters.JSON
         def item = Document.parse(stgStr.toString())
-        new FindOneAndReplaceOptions(upsert: true)
         appsCollection.findOneAndReplace(criteria,item, new FindOneAndReplaceOptions(upsert: true))
     }
     def removeUserSettings(env,app,userId){
-        MongoDatabase database=loadDataBase()
+        MongoDatabase database=loadDB()
         MongoCollection stgCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)

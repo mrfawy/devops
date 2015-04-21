@@ -1,19 +1,43 @@
-<!doctype html>
 <html lang="en" class="no-js">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title><g:layoutTitle default="Grails"/></title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title><g:layoutTitle default="Dashboard" /></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+
+        <!-- jQuery /jQueryUI -->
+        <asset:javascript src="/libs/jquery.js" />
+        <asset:javascript src="/libs/jquery-ui.min.js" />
+        <!-- Bootstrap's JavaScript plugins-->
+        <asset:javascript src="/libs/bootstrap.min.js" />
+
+        <asset:javascript src="/libs/angular.min.js" />
+
+        <!-- CSS -->
+        <asset:stylesheet href="bootstrap.min.css" />
+        <asset:stylesheet href="jquery-ui.css" />
+        <asset:stylesheet href=" jquery-ui.theme.css" />
+        <asset:stylesheet href="jquery-ui.structure.css" />
+
+
+        <asset:stylesheet href="modal_alert.css" />
+        <asset:javascript src="loading-overlay.min.js" />
+
+
         <asset:stylesheet src="application.css"/>
         <asset:javascript src="application.js"/>
 
+        <asset:javascript src="/settingsModule/settingsModule.js"/>
+        <asset:javascript src="/settingsModule/selectEnvAppCtrl.js"/>
+
         <g:layoutHead/>
     </head>
-    <body>
-        <div id="grailsLogo" role="banner"><a href="http://grails.org"><asset:image src="grails_logo.png" alt="Grails"/></a></div>
-        <g:layoutBody/>
-        <div class="footer" role="contentinfo"></div>
-        <div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
+    <body ng-app="dashBoardApp">
+    <div>
+    		<g:render template="/common/modal_alert" />
+    	</div>
+    	<g:layoutBody />
+
     </body>
 </html>
