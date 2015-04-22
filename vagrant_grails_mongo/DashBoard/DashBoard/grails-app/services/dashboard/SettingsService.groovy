@@ -122,13 +122,19 @@ class SettingsService {
         MongoCollection<Document> envsCollection=database.getCollection(COLLECTION_ENVS)
         BasicDBObject query = new BasicDBObject("name",name)
         envsCollection.deleteOne(query);
+
+        //delete all related settings records
+        BasicDBObject relatedSettings = new BasicDBObject("env",name)
+        MongoCollection<Document> settingsCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
+        settingsCollection.deleteMany(relatedSettings)
     }
-    def addApp( name ){
+    def addApp( appName,app){
         MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
-        //DBConnectionFactory.apps.insert({name:"DEV"})
-        Document doc = new Document("name", name)
-        appsCollection.findOneAndReplace(doc,doc, new FindOneAndReplaceOptions(upsert: true))
+        Document doc = new Document("name", appName)
+        def appStr=app as grails.converters.JSON
+        def item = Document.parse(appStr.toString())
+        appsCollection.findOneAndReplace(doc,item, new FindOneAndReplaceOptions(upsert: true))
     }
     def removeApp(name){
         MongoDatabase database=loadDB()
@@ -148,6 +154,17 @@ class SettingsService {
             result<<item
         }
         return result
+    }
+    def generateUserSettingsForApp(env,app,userId){
+        MongoDatabase database=loadDB()
+        MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
+        BasicDBObject query = new BasicDBObject("name",app)
+        Document appDB=appsCollection.find(query).projection(Projections.excludeId())?.first()
+        def slurper=new JsonSlurper()
+        def setting=slurper.parseText(appDB.toJson())
+        setting.env=env
+        setting.userId=userId      l
+        return setting
     }
 
     def loadUsers(def env,def app){

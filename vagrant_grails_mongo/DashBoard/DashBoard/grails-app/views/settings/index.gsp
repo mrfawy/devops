@@ -4,7 +4,6 @@
 </head>
 <body>
 <div ng-controller="SelectEnvAppCtrl as ctrl">
-{{env}} -  {{app}}
 
     <select ng-model="env">
         <option ng-repeat="env in ctrl.envs" value="{{env.name}}">
@@ -18,23 +17,41 @@
         </option>
     </select>
 
+    <select ng-model="userId">
+        <option ng-repeat="user in ctrl.userIds" value="{{user.userId}}">
+            {{user.userId}}
+        </option>
+    </select>
 
-    <div ng-repeat="user in ctrl.userIds">{{user.userId}}</div>
+    <div>
+        Create New UserId
+        <div>
+            <input ng-model="ctrl.newUserId"/>
+            <button ng-click="ctrl.createUserId()">create UserId</button>
+        </div>
+    </div>
+
+    <div ng-controller="SettingsEditorCtrl as settingsEditorCtrl">
+        <h2>Settings</h2>
+        <button ng-click="settingsEditorCtrl.saveSettings()">Save </button>
+        <button ng-click="settingsEditorCtrl.refresh()">Reset </button>
+        <button ng-click="settingsEditorCtrl.cloneSettings()">clone </button>
+        <button ng-click="settingsEditorCtrl.applyClonedSettings()">paste </button>
+        <div ng-repeat="service in settingsEditorCtrl.settings.services">
+            <h4>Service : {{service.name}}</h4>
+            <div ng-repeat="property in service.properties">
+                Name:{{property.name}}
+                Value:<input type="text" ng-model="property.value"/>
+            </div>
+        </div>
+        {{settingsEditorCtrl.settings}}
+    </div>
+
+
+
+
 
 </div>
 
-<div  ng-init="qty=1;cost=2">
-    <b>Invoice:</b>
-
-    <div>
-        Quantity: <input type="number" min="0" ng-model="qty"/>
-    </div>
-    <div>
-        Costs: <input type="number" min="0" ng-model="cost"/>
-    </div>
-    <div>
-        <b>Total:</b> {{qty * cost | currency}}
-    </div>
-</div>
 </body>
 </html>

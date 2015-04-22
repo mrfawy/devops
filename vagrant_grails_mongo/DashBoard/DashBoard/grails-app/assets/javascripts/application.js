@@ -1,3 +1,3 @@
 angular.module('dashBoardApp', [
-  'dashBoard.settingsModule'
+  'dashBoard.settingsModule','dashBoard.adminModule'
 ]);

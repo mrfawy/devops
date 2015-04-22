@@ -1,56 +1,71 @@
-var module=angular.module('dashBoard.settingsModule');
-module.controller('SelectEnvAppCtrl', ['$scope', 'loadService','userIdsService',
-    function($scope,loadService,userIdsService) {
-    var ctrl=this;
-    loadService.loadData("envs")
-               .success(function(data, status, headers) {
-                 ctrl.envs=data;
-               });
-   loadService.loadData("apps")
-                  .success(function(data, status, headers) {
-                    ctrl.apps=data;
-                  });
-   this.loadUserIds=function(){
-           if($scope.env!=null && $scope.app!=null){
-               userIdsService.loadData($scope.env,$scope.app)
-                              .success(function(data, status, headers) {
-                                ctrl.userIds=data;
-                              });
-           }
+var module = angular.module('dashBoard.settingsModule');
+module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'loadService', 'userIdsService',
+    function($scope, $log, loadService, userIdsService) {
+        var ctrl = this;
+        loadService.loadData("envs")
+            .success(function(data, status, headers) {
+                ctrl.envs = data;
+            });
+        loadService.loadData("apps")
+            .success(function(data, status, headers) {
+                ctrl.apps = data;
+            });
+        this.loadUserIds = function() {
+            if ($scope.env != null && $scope.app != null) {
+                userIdsService.loadUserIds($scope.env, $scope.app)
+                    .success(function(data, status, headers) {
+                        ctrl.userIds = data;
+                    });
+            }
 
-       }
 
-    $scope.$watch('app', function() {
+        }
+        this.createUserId = function() {
+            if (ctrl.newUserId) {
+                userIdsService.createUserId($scope.env, $scope.app, ctrl.newUserId)
+                    .success(function(data, status, headers) {
+                        $log.info("added userID successfully");
+                        ctrl.loadUserIds();
+                    });
+            } else {
+                $log.error("missing UserID")
+            }
+        }
+
+        $scope.$watchGroup(['app', 'env'], function() {
             ctrl.loadUserIds();
-       });
-       $scope.$watch('env', function() {
-                   ctrl.loadUserIds();
-              });
+        });
 
-
-
-}]);
+    }
+]);
 
 module.factory('loadService', ['$http', function($http) {
     var doRequest = function(src) {
-      return $http({
-        method: 'GET',
-        url: "/"+src
-      });
+        return $http({
+            method: 'GET',
+            url: "/" + src
+        });
     }
     return {
-      loadData: function(src) { return doRequest(src); },
+        loadData: function(src) {
+            return doRequest(src);
+        },
     };
-  }]);
+}]);
 
 module.factory('userIdsService', ['$http', function($http) {
-    var doRequest = function(env,app) {
-      return $http({
-        method: 'GET',
-        url: "/userIds/"+env+"/"+app
-      });
+    var loadUserIds = function(env, app) {
+        return $http.get("/userIds/" + env + "/" + app);
+    }
+    var createUserId = function(env, app, userId) {
+        return $http.post("/settings/" + env + "/" + app + "/" + userId);
     }
     return {
-      loadData: function(env,app) { return doRequest(env,app); },
+        loadUserIds: function(env, app) {
+            return loadUserIds(env, app);
+        },
+        createUserId: function(env, app, userId) {
+            return createUserId(env, app, userId);
+        },
     };
-  }]);
+}]);

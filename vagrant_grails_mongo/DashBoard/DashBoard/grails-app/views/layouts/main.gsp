@@ -30,6 +30,11 @@
 
         <asset:javascript src="/settingsModule/settingsModule.js"/>
         <asset:javascript src="/settingsModule/selectEnvAppCtrl.js"/>
+        <asset:javascript src="/settingsModule/settingsEditorCtrl.js"/>
+
+        <asset:javascript src="/adminModule/adminModule.js"/>
+        <asset:javascript src="/adminModule/adminEnvCtrl.js"/>
+        <asset:javascript src="/adminModule/adminAppCtrl.js"/>
 
         <g:layoutHead/>
     </head>

@@ -17,7 +17,7 @@ class SettingsController {
 
     def createUserSettings(){
 
-        def template=settingsTemplateService.createTemplateForApp(params.env,params.app,params.userId)
+        def template=settingsService.generateUserSettingsForApp(params.env,params.app,params.userId)
         settingsService.upsertUserSettings(template)
         render ControllerResponse.success() as JSON
     }

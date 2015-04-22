@@ -25,7 +25,8 @@ class SetupController {
 
     }
     def addApp(){
-        settingsService.addApp(params.name)
+        def app=request.JSON
+        settingsService.addApp(params.name,app)
         render ControllerResponse.success() as JSON
     }
     def removeApp(){
