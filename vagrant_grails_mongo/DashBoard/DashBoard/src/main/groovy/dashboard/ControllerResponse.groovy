@@ -1,3 +1,5 @@
+package dashboard
+
 class ControllerResponse {
     def code
     def status
@@ -5,6 +7,7 @@ class ControllerResponse {
 
     static def  OK = "0000"
     static def  NO_RECORDS = "0001"
+
 
     static success(){
         return new ControllerResponse(code: OK,status: "Success",message: "")

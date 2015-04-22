@@ -35,6 +35,7 @@
         <asset:javascript src="/adminModule/adminModule.js"/>
         <asset:javascript src="/adminModule/adminEnvCtrl.js"/>
         <asset:javascript src="/adminModule/adminAppCtrl.js"/>
+        <asset:javascript src="/adminModule/adminUserCtrl.js"/>
 
         <g:layoutHead/>
     </head>

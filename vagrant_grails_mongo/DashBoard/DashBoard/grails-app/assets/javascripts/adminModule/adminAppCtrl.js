@@ -33,7 +33,7 @@ module.controller('AdminAppController', ['$scope', '$log', 'appService',
                 return;
             }
             var app={}
-            app.app=ctrl.newApp.name;
+            app.name=ctrl.newApp.name;
             app.services=JSON.parse(ctrl.newApp.services)
             appService.createApp(ctrl.newApp.name,app).success(
                 function(data, status, headers) {

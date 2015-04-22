@@ -1,15 +1,10 @@
 package dashboard
 
 import grails.artefact.Interceptor
-import grails.core.GrailsApplication
-import grails.web.servlet.mvc.GrailsHttpSession
-import org.grails.web.servlet.mvc.GrailsWebRequest
-import org.springframework.web.context.request.RequestContextHolder
-
-import java.lang.annotation.Annotation
+import grails.artefact.controller.support.ResponseRedirector
 
 
-class SecurityInterceptor {
+class SecurityInterceptor implements ResponseRedirector{
 
 
     SecurityInterceptor() {
@@ -18,11 +13,8 @@ class SecurityInterceptor {
     }
 
     boolean before() {
-        //if (!session['authenticated']) {
-            //redirect(controller: "authentication", action: "index")
-            //return false
-        //}
-        return true
+
+        true
     }
     boolean after() { true }
 

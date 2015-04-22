@@ -5,6 +5,7 @@ import grails.converters.JSON
 class SetupController {
 
     SettingsService settingsService
+    AuthenticationService authenticationService
 
     def index() { }
 
@@ -33,4 +34,28 @@ class SetupController {
         settingsService.removeApp(params.name)
         render ControllerResponse.success() as JSON
     }
+
+    def loadUsers(){
+        render authenticationService.loadUsers(params.role) as JSON
+    }
+    def removeUser(){
+        authenticationService.removeUser(params.user)
+        render ControllerResponse.success() as JSON
+    }
+    def createUser(){
+        def user=request.JSON
+        def result=authenticationService.registerUser(user.userName,user.password,"user")
+        if(result){
+            render ControllerResponse.success() as JSON
+        }
+        else{
+            render new ControllerResponse(code: "0001",status: "warning",message: "already exists") as JSON
+        }
+
+    }
+    def assignUsertoRole(){
+        authenticationService.assignUserRole(params.user,params.role)
+        render ControllerResponse.success() as JSON
+    }
+
 }

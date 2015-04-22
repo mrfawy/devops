@@ -23,10 +23,27 @@
     </div>
     <button ng-click="ctrl.createApp()">create</button>
     <button ng-click="ctrl.reset()">reset</button>
-    <input ng-model="ctrl.newApp.name"/>
-    <textarea ng-model="ctrl.newApp.services"/>
+    <input ng-model="ctrl.newApp.name"></input>
+    <textarea ng-model="ctrl.newApp.services"></textarea>
 
 
+</div>
+
+<div  ng-controller="AdminUserController as ctrl">
+    <h2>Users</h2>
+    Admins:
+    <div ng-repeat="user in ctrl.adminUsers">
+        {{user.name}}
+        <button ng-click="ctrl.toggleRole(user)">toggle Role</button>
+        <button ng-click="ctrl.removeUser(user.name)">Remove</button>
+    </div>
+
+    Users:
+    <div ng-repeat="user in ctrl.normalUsers">
+        {{user.name}}
+        <button ng-click="ctrl.toggleRole(user)">toggle Role</button>
+        <button ng-click="ctrl.removeUser(user.name)">Remove</button>
+    </div>
 </div>
 </body>
 </html>

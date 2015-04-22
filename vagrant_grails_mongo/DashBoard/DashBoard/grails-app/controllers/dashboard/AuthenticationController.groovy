@@ -22,7 +22,14 @@ class AuthenticationController {
 
     }
     def register(){
-
+        def result=authenticationService.registerUser(params.userName,params.password,"user")
+        if(result){
+            redirect(controller: 'settings', action: 'index')
+        }
+        else{
+            request.error="user already exists ."
+            render(view: "index")
+        }
     }
     def logout(){
         session.invalidate()

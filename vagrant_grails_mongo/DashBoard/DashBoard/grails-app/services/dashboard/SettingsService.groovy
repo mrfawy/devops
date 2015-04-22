@@ -141,6 +141,11 @@ class SettingsService {
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
         BasicDBObject query = new BasicDBObject("name",name)
         appsCollection.deleteOne(query);
+
+        //delete all related settings records
+        BasicDBObject relatedSettings = new BasicDBObject("app",name)
+        MongoCollection<Document> settingsCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
+        settingsCollection.deleteMany(relatedSettings)
     }
     def loadApps(){
         MongoDatabase database=loadDB()
@@ -162,9 +167,12 @@ class SettingsService {
         Document appDB=appsCollection.find(query).projection(Projections.excludeId())?.first()
         def slurper=new JsonSlurper()
         def setting=slurper.parseText(appDB.toJson())
-        setting.env=env
-        setting.userId=userId      l
-        return setting
+        def result=slurper.parseText("{}")
+        result.env=env
+        result.app=app
+        result.userId=userId
+        result.services=setting.services
+        return result
     }
 
     def loadUsers(def env,def app){
