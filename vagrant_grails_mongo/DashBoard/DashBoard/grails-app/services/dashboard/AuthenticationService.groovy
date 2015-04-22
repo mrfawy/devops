@@ -58,8 +58,8 @@ class AuthenticationService {
         //DBConnectionFactory.envs.insert({name:"DEV"})
         Document doc = new Document("name", userName)
         int count=usersCollection.count(doc)
-        if(count){
-            return false
+        if(count>0){
+            throw new RuntimeException("User Already exists")
         }
         doc.append("password",password)
         doc.append("role",role)

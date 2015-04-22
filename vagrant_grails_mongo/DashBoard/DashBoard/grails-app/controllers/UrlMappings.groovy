@@ -24,7 +24,7 @@ class UrlMappings {
         }
 
         "/"(controller:"authentication" , action:"index")
-        "500"(view:'/error')
-        "404"(view:'/notFound')
+        "500"(controller:"error", action:"index")
+        "404"(controller:"error",action:"index")
     }
 }

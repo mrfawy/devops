@@ -4,6 +4,7 @@ class ControllerResponse {
     def code
     def status
     def message
+    def exception
 
     static def  OK = "0000"
     static def  NO_RECORDS = "0001"

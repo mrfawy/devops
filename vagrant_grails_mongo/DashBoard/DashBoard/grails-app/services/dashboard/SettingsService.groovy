@@ -198,9 +198,6 @@ class SettingsService {
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
         query.append("userId",userId)
-
-
-
         def cursor = stgCollection.find(query).projection(Projections.excludeId()).iterator()
         def item = cursor.hasNext() ? cursor.next() : null;
         return item

@@ -45,12 +45,6 @@ class SetupController {
     def createUser(){
         def user=request.JSON
         def result=authenticationService.registerUser(user.userName,user.password,"user")
-        if(result){
-            render ControllerResponse.success() as JSON
-        }
-        else{
-            render new ControllerResponse(code: "0001",status: "warning",message: "already exists") as JSON
-        }
 
     }
     def assignUsertoRole(){

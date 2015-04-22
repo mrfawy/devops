@@ -60,6 +60,6 @@ module.factory('userService', ['$http', function($http) {
         },
         assignUsertoRole: function(user,role) {
             return assignUsertoRole(user,role);
-        },
+        }
     };
 }]);
