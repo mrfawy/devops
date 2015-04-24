@@ -12,3 +12,6 @@
 *= require_self
 */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.editor{
+    height:600px  !important;
+}
