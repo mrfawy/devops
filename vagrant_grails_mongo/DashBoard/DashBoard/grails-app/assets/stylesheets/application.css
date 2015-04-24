@@ -11,3 +11,4 @@
 *= require mobile
 *= require_self
 */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

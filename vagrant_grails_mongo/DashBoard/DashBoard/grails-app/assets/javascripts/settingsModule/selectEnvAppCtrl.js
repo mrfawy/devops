@@ -1,6 +1,6 @@
 var module = angular.module('dashBoard.settingsModule');
-module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'loadService', 'userIdsService',
-    function($scope, $log, loadService, userIdsService) {
+module.controller('SelectEnvAppCtrl', ['$scope', '$log','ToasterService', 'loadService', 'userIdsService',
+    function($scope, $log,toasterService, loadService, userIdsService) {
         var ctrl = this;
         loadService.loadData("envs")
             .success(function(data, status, headers) {
@@ -10,7 +10,7 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'loadService', 'userIds
             .success(function(data, status, headers) {
                 ctrl.apps = data;
             });
-        this.loadUserIds = function() {
+        ctrl.loadUserIds = function() {
             if ($scope.env != null && $scope.app != null) {
                 userIdsService.loadUserIds($scope.env, $scope.app)
                     .success(function(data, status, headers) {
@@ -24,15 +24,27 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'loadService', 'userIds
 
 
         }
-        this.createUserId = function() {
+        ctrl.userIdCreationMode=false;
+        ctrl.createNewUserId=function(){
+            ctrl.userIdCreationMode=true;
+        }
+        ctrl.createUserId = function() {
             if (ctrl.newUserId) {
                 userIdsService.createUserId($scope.env, $scope.app, ctrl.newUserId)
                     .success(function(data, status, headers) {
                         $log.info("added userID successfully");
+                        toasterService.showInfo("Create UserId","UserId created , check userId list");
                         ctrl.loadUserIds();
+                        ctrl.newUserId=null;
+                        ctrl.userIdCreationMode=false;
                     });
             } else {
-                $log.error("missing UserID")
+            if($scope.env==null||$scope.app==null){
+                 toasterService.showWarning("Create UserId","Please select Environment and Application first");
+                 $log.error("Please select Environment and App first")
+            }
+                toasterService.showWarning("Create UserId","Missing UserId");
+                $log.error("Missing UserId")
             }
         }
 

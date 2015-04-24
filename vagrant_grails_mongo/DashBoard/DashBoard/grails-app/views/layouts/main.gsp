@@ -19,7 +19,7 @@
 
 
     <!-- Angular bootstrap-->
-    <asset:javascript src="/libs/angular-ui-bootstrap-0.12.1.min"/>
+    <asset:javascript src="/libs/angular-ui-bootstrap-0.12.1.min.js"/>
 
     <!-- CSS -->
     <asset:stylesheet href="bootstrap.min.css"/>
