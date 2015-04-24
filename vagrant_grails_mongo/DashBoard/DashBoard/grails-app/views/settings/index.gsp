@@ -16,79 +16,83 @@
         </div>
     </div>
     <div class="row">
-
-        <div class="panel panel-info">
-            <!-- Default panel contents -->
-            <div class="panel-heading">
-                <label> User Selection</label>
-            </div>
-            <div class="container ">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="col-xs-4">
-                            <form class="form">
-                                <div class="form-group ">
-                                    <label class="control-label ">Environment</label>
-                                    <select ng-model="env" class="form-control " placeholder="Environment">
-                                        <option ng-repeat="env in ctrl.envs" value="{{env.name}}">
-                                            {{env.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-xs-4">
-                            <form class="form">
-                                <div class="form-group ">
-                                    <label class="control-label ">Application</label>
-                                    <select ng-model="app" class="form-control " placeholder="Application">
-                                        <option ng-repeat="app in ctrl.apps" value="{{app.name}}">
-                                            {{app.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-xs-4">
-                            <form class="form">
-                                <div class="form-group ">
-                                    <label class="control-label">UserId</label>
-                                    <select ng-model="userId" class="form-control" placeholder="UserId">
-                                        <option ng-repeat="user in ctrl.userIds" value="{{user.userId}}">
-                                            {{user.userId}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+        <div class="col-xs-12">
+            <div class="panel panel-info">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <label> User Selection</label>
                 </div>
-
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="col-xs-4" ng-hide="ctrl.userIdCreationMode">
-                            <a href="#" ng-click="ctrl.createNewUserId()"> Create new userId ?</a>
-                        </div>
-                        <div class="col-xs-4" ng-show="ctrl.userIdCreationMode">
-                            <form class="form">
-                                <div class="form-group ">
-                                    <input ng-model="ctrl.newUserId" type="text" class="form-control"
-                                           placeholder="Enter New UserId "
-                                           aria-describedby="basic-addon1"></input>
-                                    <button class="btn btn-primary form-control" ng-click="ctrl.createUserId()"> Create
-                                    </button>
-                                </div>
-
-                            </form>
-
+                <div class="container-fluid ">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-4">
+                                <form class="form">
+                                    <div class="form-group ">
+                                        <label class="control-label ">Environment</label>
+                                        <select ng-model="env" class="form-control " placeholder="Environment">
+                                            <option ng-repeat="env in ctrl.envs" value="{{env.name}}">
+                                                {{env.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-xs-4">
+                                <form class="form">
+                                    <div class="form-group ">
+                                        <label class="control-label ">Application</label>
+                                        <select ng-model="app" class="form-control " placeholder="Application">
+                                            <option ng-repeat="app in ctrl.apps" value="{{app.name}}">
+                                                {{app.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-xs-4">
+                                <form class="form">
+                                    <div class="form-group ">
+                                        <label class="control-label">UserId</label>
+                                        <select ng-model="userId" class="form-control" placeholder="UserId">
+                                            <option ng-repeat="user in ctrl.userIds" value="{{user.userId}}">
+                                                {{user.userId}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
-                </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-4" ng-hide="ctrl.userIdCreationMode">
+                                <a href="#" ng-click="ctrl.createNewUserId()"> Create new userId ?</a>
+                            </div>
+                            <div class="col-xs-4" ng-show="ctrl.userIdCreationMode">
+                                <form class="form">
+                                    <div class="form-group ">
+                                        <input ng-model="ctrl.newUserId" type="text" class="form-control"
+                                               placeholder="Enter New UserId "
+                                               aria-describedby="basic-addon1"></input>
+                                        <button class="btn btn-primary form-control" ng-click="ctrl.createUserId()">
+                                            Create
+                                        </button>
+                                    </div>
 
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
         </div>
-        <div class="row" ng-show="userId!=null" ng-controller="SettingsEditorCtrl as settingsEditorCtrl">
+    </div>
+    <div class="row" ng-show="userId!=null" ng-controller="SettingsEditorCtrl as settingsEditorCtrl">
+        <div class="col-xs-12">
             <div class="panel panel-info">
                 <!-- Default panel contents -->
                 <div class="panel-heading">
@@ -139,15 +143,25 @@
                     </div>
 
                 </div>
-                <div class="container">
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <div class="col-xs-12"> Service(s) Settings :</div>
-                        </div>
 
-                        <div class="row" ng-repeat="service in settingsEditorCtrl.settings.services">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row " ng-repeat="service in settingsEditorCtrl.settings.services">
                             <div class="col-xs-12">
-                                <div class="panel panel-info">
+                                <table class="table table-hover service-table" ng-hide="editable">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">{{service.name}}</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tr ng-repeat="property in service.properties">
+                                        <th>{{property.name}}</th>
+                                        <td>{{property.value}}</td>
+                                    </tr>
+                                </table>
+
+                                <div class="panel panel-info" ng-show="editable">
                                     <div class="panel-heading">
                                         <label>Service: {{service.name}}</label>
                                     </div>
@@ -162,21 +176,20 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
+
                         </div>
 
                     </div>
-
                 </div>
-
-
             </div>
 
-
         </div>
+
+
     </div>
+</div>
 
 </div>
 </body>
-</html>
+        </html>

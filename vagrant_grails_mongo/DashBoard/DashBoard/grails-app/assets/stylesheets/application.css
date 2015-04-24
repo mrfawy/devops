@@ -15,3 +15,9 @@
 .editor{
     height:600px  !important;
 }
+
+.service-table thead th{
+      text-align: center;
+      color:#31708f;
+
+}
