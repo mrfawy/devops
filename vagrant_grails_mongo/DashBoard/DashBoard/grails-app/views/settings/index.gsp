@@ -66,7 +66,7 @@
 
         </div>
     </div>
-    <div class="row" ng-show="userId" ng-controller="SettingsEditorCtrl as settingsEditorCtrl">
+    <div class="row" ng-show="userId!=null" ng-controller="SettingsEditorCtrl as settingsEditorCtrl">
         <div class="panel panel-info">
             <!-- Default panel contents -->
             <div class="panel-heading">
@@ -76,29 +76,29 @@
                             <label> {{userId |uppercase}}'s Settings</label>
                         </div>
                         <div class="col-md-6">
-                            <div title="Edit Settings " class="col-md-1" ng-hide="settingsEditorCtrl.editable" >
+                            <div title="Edit Settings " class="col-md-1" ng-hide="editable" >
                                 <a ng-click="settingsEditorCtrl.editSettings()" >
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                 </a>
                             </div>
-                            <div title="Save Settings " class="col-md-1" ng-show="settingsEditorCtrl.editable">
+                            <div title="Save Settings " class="col-md-1" ng-show="editable">
                                 <a ng-click="settingsEditorCtrl.saveSettings()" >
                                     <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                                 </a>
                             </div>
-                            <div title="Reload Settings " class="col-md-1" ng-show="settingsEditorCtrl.editable">
+                            <div title="Reload Settings " class="col-md-1" ng-show="editable">
                                 <a ng-click="settingsEditorCtrl.refresh()" >
                                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                                 </a>
                             </div>
 
-                            <div title="Clone Settings " class="col-md-1" ng-hide="settingsEditorCtrl.editable">
+                            <div title="Clone Settings " class="col-md-1" ng-hide="editable">
                                 <a ng-click="settingsEditorCtrl.cloneSettings()" >
-                                    <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
+                                    <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
                                 </a>
                             </div>
 
-                            <div title="Apply Cloned Settings " class="col-md-1" ng-show="ctrl.cloneable">
+                            <div title="Apply Cloned Settings " class="col-md-1" ng-show="cloneable">
                                 <a ng-click="settingsEditorCtrl.applyClonedSettings()">
                                     <span class="glyphicon glyphicon-paste" aria-hidden="true"></span>
 

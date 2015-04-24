@@ -1,15 +1,7 @@
 var module = angular.module('dashBoard.settingsModule');
-module.controller('SettingsEditorCtrl', ['$scope', '$log', 'toaster', 'SettingsService',
-    function($scope, $log, toaster, settingsService) {
+module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'SettingsService',
+    function($scope, $log, toasterService, settingsService) {
         var ctrl = this;
-        ctrl.toast = function(type, title, body) {
-            toaster.pop({
-                "type": type,
-                "title": title,
-                "body": body,
-                showCloseButton: true
-            });
-        };
 
         this.refresh = function() {
             settingsService.loadSettings($scope.env, $scope.app, $scope.userId)
@@ -19,25 +11,23 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'toaster', 'SettingsS
                     } else {
                         ctrl.settings = data;
                     }
-                    ctrl.editable = false;
-                    ctrl.toast('success', 'Loading', 'data loaded successfully');
-                    ctrl.updateCloneableState()
+                    $scope.editable = false;
 
                 });
         };
 
         ctrl.editSettings = function() {
-            ctrl.editable=true;
-           ctrl.toast('success', 'Loading', 'data loaded successfully');
-            if($scope.clonedSettings!=null){
+            $scope.editable=true;
+            if($scope.clonedSettings){
                 ctrl.cloneable=true;
             }
         }
         ctrl.saveSettings = function() {
             settingsService.saveSettings($scope.env, $scope.app, $scope.userId, ctrl.settings)
                 .success(function(data, status, headers) {
+                    toasterService.showSuccess('Save Settings', 'saved Settings successfully');
                     $log.info("saved Settings successfully");
-                    ctrl.editable = false;
+                    $scope.editable = false;
 
                 });
         };
@@ -47,16 +37,15 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'toaster', 'SettingsS
         ctrl.cloneSettings = function() {
             $scope.clonedSettings = ctrl.clone(ctrl.settings);
             $scope.clonedSettingsApp=$scope.app
-            ctrl.toast('info', 'Cloning', 'Cloned settings successfully');
+            toasterService.showInfo('Cloning', 'Cloned settings successfully');
         }
         ctrl.updateCloneableState=function(){
-            if($scope.clonedSettings && $scope.app===$scope.clonedSettingsApp){
-               //keep clone , do nothing
+            if($scope.clonedSettings ==null ||  $scope.app!=$scope.clonedSettingsApp){
+               //reset clone
+               $scope.clonedSettings=null;
+               $scope.clonedSettingsApp=null;
             }
-            else{
-                $scope.clonedSettings=null;
-                $scope.clonedSettingsApp=null;
-            }
+
         }
         ctrl.applyClonedSettings = function() {
             if ($scope.clonedSettings) {
@@ -65,9 +54,9 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'toaster', 'SettingsS
                     clone.env = ctrl.settings.env;
                     clone.userId = ctrl.settings.userId;
                     ctrl.settings = clone;
-
                 }
             } else {
+                toasterService.showError('Cloning', "Can't clone to a different app");
                 $log.error("can't clone to different app");
             }
         }
@@ -80,6 +69,14 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'toaster', 'SettingsS
                 ctrl.settings = null;
             }
 
+        });
+        $scope.$watchGroup(['clonedSettings','editable'],function(newValues,oldValues,scope){
+            if($scope.clonedSettings !=null && scope.editable ){
+                $scope.cloneable=true;
+            }
+            else{
+                $scope.cloneable=false;
+            }
         });
     }
 ]);

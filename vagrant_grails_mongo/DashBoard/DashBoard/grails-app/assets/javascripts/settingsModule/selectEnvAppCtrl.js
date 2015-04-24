@@ -14,7 +14,11 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'loadService', 'userIds
             if ($scope.env != null && $scope.app != null) {
                 userIdsService.loadUserIds($scope.env, $scope.app)
                     .success(function(data, status, headers) {
-                        ctrl.userIds = data;
+                        $scope.userId = null;
+                        if(data.length>0){
+                            ctrl.userIds = data;
+                        }
+
                     });
             }
 

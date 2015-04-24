@@ -39,6 +39,8 @@
     <asset:javascript src="application.js"/>
     <asset:stylesheet src="application.css"/>
 
+    <asset:javascript src="toasterService.js"/>
+
 
     <asset:javascript src="/settingsModule/settingsModule.js"/>
     <asset:javascript src="/settingsModule/selectEnvAppCtrl.js"/>
