@@ -154,7 +154,6 @@
                                         <th colspan="2">{{service.name}}</th>
                                     </tr>
                                     </thead>
-
                                     <tr ng-repeat="property in service.properties">
                                         <th>{{property.name}}</th>
                                         <td>{{property.value}}</td>
@@ -165,16 +164,18 @@
                                     <div class="panel-heading">
                                         <label>Service: {{service.name}}</label>
                                     </div>
-                                    <div class="container-fluid">
-                                        <div ng-repeat="property in service.properties" class="row">
-                                            <label class="col-md-2">{{property.name}}</label>
+                                    <div class="col-xs-12">
+                                        <form class="form">
+                                            <div class="form-group" ng-repeat="property in service.properties" >
+                                                <label class="control-label">{{property.name}}</label>
+                                                <input type="text" ng-model="property.value" typeahead="val for val in settingsEditorCtrl.propertyValues.values[property.name] | filter:$viewValue "
+                                                       class="form-control"
+                                                       ng-show="editable" ng-focus="settingsEditorCtrl.checkPropertiesValues(app,service.name,property.name)"/>
+                                            </div>
 
-                                            <div class="col-md-6" ng-hide="editable">{{property.value}}</div>
-                                            <input type="text" ng-model="property.value" class="col-md-10 form-control"
-                                                   ng-show="editable"/>
-
-                                        </div>
+                                        </form>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -190,6 +191,5 @@
     </div>
 </div>
 
-</div>
 </body>
-        </html>
+</html>

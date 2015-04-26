@@ -21,3 +21,7 @@
       color:#31708f;
 
 }
+.service-table td,th{
+      text-align: center;
+      width: 50%;
+}

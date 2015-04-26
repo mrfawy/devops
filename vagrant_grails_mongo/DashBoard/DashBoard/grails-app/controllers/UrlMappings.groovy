@@ -17,6 +17,9 @@ class UrlMappings {
         "/users/$user?/$role?"(controller:"setup" , action:[GET:"loadUsers",POST:"createUser",PUT:"assignUsertoRole",DELETE:"removeUser"])
 
 
+        "/analytics/values/$app/$service/$property?" (controller:"analytics" , action:"retrieveStoredValuesForProperty")
+
+
         "/$controller/$action?/$id?(.$format)?"{
             constraints {
                 // apply constraints here

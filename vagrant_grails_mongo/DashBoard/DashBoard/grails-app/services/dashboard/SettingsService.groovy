@@ -80,8 +80,6 @@ import org.bson.Document
 @Transactional
 class SettingsService {
     GrailsApplication grailsApplication
-    def mongoClient
-    def database
 
     def COLLECTION_ENVS="envs"
     def COLLECTION_APPS="apps"
