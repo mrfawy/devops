@@ -9,7 +9,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
         $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 
         this.refresh = function() {
-            settingsService.loadSettings($scope.env, $scope.app, $scope.userId)
+            settingsService.loadSettings($scope.env, $scope.app, $scope.token)
                 .success(function(data, status, headers) {
                     if (!data || data.code) {
                         ctrl.settings = null;
@@ -32,7 +32,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
             }
         }
         ctrl.saveSettings = function() {
-            settingsService.saveSettings($scope.env, $scope.app, $scope.userId, ctrl.settings)
+            settingsService.saveSettings($scope.env, $scope.app, $scope.token, ctrl.settings)
                 .success(function(data, status, headers) {
                     toasterService.showSuccess('Save Settings', 'saved Settings successfully');
                     $log.info("saved Settings successfully");
@@ -61,7 +61,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
                 if ($scope.clonedSettings.app === ctrl.settings.app) {
                     var clone = ctrl.clone($scope.clonedSettings);
                     clone.env = ctrl.settings.env;
-                    clone.userId = ctrl.settings.userId;
+                    clone.token = ctrl.settings.token;
                     ctrl.settings = clone;
                 }
             } else {
@@ -95,8 +95,8 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
         ctrl.loadPropertiesValues=function(app,service){
         }
 
-        $scope.$watchGroup(['app', 'env', 'userId'], function(newValues, oldValues, scope) {
-            if (scope.userId != null && scope.env != null && scope.app != null) {
+        $scope.$watchGroup(['app', 'env', 'token'], function(newValues, oldValues, scope) {
+            if (scope.token != null && scope.env != null && scope.app != null) {
                 ctrl.refresh();
                 ctrl.updateCloneableState();
             } else {
@@ -116,21 +116,21 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
 ]);
 
 module.factory('SettingsService', ['$http', function($http) {
-    var loadSettings = function(env, app, userId) {
+    var loadSettings = function(env, app, token) {
         return $http({
             method: 'GET',
-            url: "/settings/" + env + "/" + app + "/" + userId
+            url: "/settings/" + env + "/" + app + "/" + token
         });
     };
-    var saveSettings = function(env, app, userId, settings) {
-        return $http.put("/settings/" + env + "/" + app + "/" + userId, settings);
+    var saveSettings = function(env, app, token, settings) {
+        return $http.put("/settings/" + env + "/" + app + "/" + token, settings);
     };
     return {
-        loadSettings: function(env, app, userId) {
-            return loadSettings(env, app, userId);
+        loadSettings: function(env, app, token) {
+            return loadSettings(env, app, token);
         },
-        saveSettings: function(env, app, userId, settings) {
-            return saveSettings(env, app, userId, settings);
+        saveSettings: function(env, app, token, settings) {
+            return saveSettings(env, app, token, settings);
         },
     };
 }]);

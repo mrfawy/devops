@@ -8,10 +8,10 @@ class UrlMappings {
 
         "/apps/$name?" (controller:"setup" ,action : [GET:"retrieveApps",DELETE:"removeApp", POST:"addApp"])
 
-        "/settings/$env/$app/$userId" (controller:"settings" , action : [ GET:"loadUserSettings",POST:"createUserSettings", PUT:"updateUserSettings", DELETE:"removeUserSettings"])
+        "/settings/$env/$app/$token" (controller:"settings" , action : [ GET:"loadTokenSettings",POST:"createTokenSettings", PUT:"updateTokenSettings", DELETE:"removeTokenSettings"])
 
 
-        "/userIds/$env/$app" (controller:"settings" , action:"retrieveUserIds")
+        "/tokens/$env/$app" (controller:"settings" , action:"retrieveTokens")
 
 
         "/users/$user?/$role?"(controller:"setup" , action:[GET:"loadUsers",POST:"createUser",PUT:"assignUsertoRole",DELETE:"removeUser"])

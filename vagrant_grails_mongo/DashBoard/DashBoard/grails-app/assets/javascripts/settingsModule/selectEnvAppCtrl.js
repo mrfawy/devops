@@ -1,6 +1,6 @@
 var module = angular.module('dashBoard.settingsModule');
-module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'loadService', 'SessionService', 'userIdsService',
-    function($scope, $log, toasterService, loadService, sessionService, userIdsService) {
+module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'loadService', 'SessionService', 'TokenService',
+    function($scope, $log, toasterService, loadService, sessionService, tokenService) {
         var ctrl = this;
 
         sessionService.loadSessionData().success(
@@ -15,13 +15,13 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
             .success(function(data, status, headers) {
                 ctrl.apps = data;
             });
-        ctrl.loadUserIds = function() {
+        ctrl.loadTokens = function() {
             if ($scope.env != null && $scope.app != null) {
-                userIdsService.loadUserIds($scope.env, $scope.app)
+                tokenService.loadTokens($scope.env, $scope.app)
                     .success(function(data, status, headers) {
-                        $scope.userId = null;
+                        $scope.token = null;
                         if (data.length > 0) {
-                            ctrl.userIds = data;
+                            ctrl.tokens = data;
                         }
 
                     });
@@ -29,32 +29,32 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
 
 
         }
-        ctrl.userIdCreationMode = false;
-        ctrl.createNewUserId = function() {
-            ctrl.userIdCreationMode = true;
+        ctrl.tokenCreationMode = false;
+        ctrl.createNewToken = function() {
+            ctrl.tokenCreationMode = true;
         }
-        ctrl.createUserId = function() {
-            if (ctrl.newUserId) {
-                userIdsService.createUserId($scope.env, $scope.app, ctrl.newUserId,ctrl.owner)
+        ctrl.createToken = function() {
+            if (ctrl.newToken) {
+                tokenService.createToken($scope.env, $scope.app, ctrl.newToken,ctrl.owner)
                     .success(function(data, status, headers) {
-                        $log.info("added userID successfully");
-                        toasterService.showInfo("Create UserId", "UserId created , check userId list");
-                        ctrl.loadUserIds();
-                        ctrl.newUserId = null;
-                        ctrl.userIdCreationMode = false;
+                        $log.info("added Token successfully");
+                        toasterService.showInfo("Create Token", "Token created , check Token list");
+                        ctrl.loadTokens();
+                        ctrl.newToken = null;
+                        ctrl.tokenCreationMode = false;
                     });
             } else {
                 if ($scope.env == null || $scope.app == null) {
-                    toasterService.showWarning("Create UserId", "Please select Environment and Application first");
+                    toasterService.showWarning("Create Token", "Please select Environment and Application first");
                     $log.error("Please select Environment and App first")
                 }
-                toasterService.showWarning("Create UserId", "Missing UserId");
-                $log.error("Missing UserId")
+                toasterService.showWarning("Create Token", "Missing Token");
+                $log.error("Missing Token")
             }
         }
 
         $scope.$watchGroup(['app', 'env'], function() {
-            ctrl.loadUserIds();
+            ctrl.loadTokens();
         });
 
     }
@@ -74,21 +74,21 @@ module.factory('loadService', ['$http', function($http) {
     };
 }]);
 
-module.factory('userIdsService', ['$http', function($http) {
-    var loadUserIds = function(env, app) {
-        return $http.get("/userIds/" + env + "/" + app);
+module.factory('TokenService', ['$http', function($http) {
+    var loadTokens = function(env, app) {
+        return $http.get("/tokens/" + env + "/" + app);
     }
-    var createUserId = function(env, app, userId, owner) {
-        return $http.post("/settings/" + env + "/" + app + "/" + userId, {
+    var createToken = function(env, app, token, owner) {
+        return $http.post("/settings/" + env + "/" + app + "/" + token, {
             "owner": owner
         });
     }
     return {
-        loadUserIds: function(env, app) {
-            return loadUserIds(env, app);
+        loadTokens: function(env, app) {
+            return loadTokens(env, app);
         },
-        createUserId: function(env, app, userId, owner) {
-            return createUserId(env, app, userId, owner);
+        createToken: function(env, app, token, owner) {
+            return createToken(env, app, token, owner);
         },
     };
 }]);

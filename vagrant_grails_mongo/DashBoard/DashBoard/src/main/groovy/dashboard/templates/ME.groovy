@@ -6,12 +6,12 @@ import groovy.json.JsonSlurper
 class ME {
     def app="ME"
 
-    def init(env, userId) {
+    def init(env, token) {
         def template = """
 {
   "env": "$env",
   "app": "$app",
-  "userId": "$userId",
+  "token": "$token",
   "services": [
     {
       "name": "BAM",

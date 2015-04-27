@@ -16,15 +16,15 @@ class SettingsController {
 
     }
 
-    def createUserSettings(){
+    def createTokenSettings(){
         def r=request.JSON
-        def template=settingsService.generateUserSettingsForApp(params.env,params.app,params.userId,r.owner)
-        settingsService.upsertUserSettings(template)
+        def template=settingsService.generateTokenSettingsForApp(params.env,params.app,params.token,r.owner)
+        settingsService.upsertTokenSettings(template)
         render ControllerResponse.success() as JSON
     }
 
-    def loadUserSettings(){
-        def result=settingsService.loadUserSettings(params.env,params.app,params.userId)
+    def loadTokenSettings(){
+        def result=settingsService.loadTokenSettings(params.env,params.app,params.token)
         if(!result){
             render ControllerResponse.noRecords() as JSON
         }else{
@@ -34,15 +34,15 @@ class SettingsController {
     }
 
     def removeUserSettings(){
-        def result=settingsService.removeUserSettings(params.env,params.app,params.userId)
+        def result=settingsService.removeTokenSettings(params.env,params.app,params.token)
     }
-    def updateUserSettings(){
+    def updateTokenSettings(){
         def setting=request.JSON
-        settingsService.upsertUserSettings(setting)
+        settingsService.upsertTokenSettings(setting)
         render ControllerResponse.success() as JSON
     }
-    def retrieveUserIds(){
-        def result=settingsService.loadUsers(params.env,params.app)
+    def retrieveTokens(){
+        def result=settingsService.loadTokens(params.env,params.app)
         render result as JSON
     }
 }

@@ -20,7 +20,7 @@
             <div class="panel panel-info">
                 <!-- Default panel contents -->
                 <div class="panel-heading">
-                    <label> User Selection</label>
+                    <label> Token Selection</label>
                 </div>
                 <div class="container-fluid ">
                     <div class="row">
@@ -52,10 +52,10 @@
                             <div class="col-xs-4">
                                 <form class="form">
                                     <div class="form-group ">
-                                        <label class="control-label">UserId</label>
-                                        <select ng-model="userId" class="form-control" placeholder="UserId">
-                                            <option ng-repeat="user in ctrl.userIds" value="{{user.userId}}">
-                                                {{user.userId}}
+                                        <label class="control-label">Token</label>
+                                        <select ng-model="token" class="form-control" placeholder="token">
+                                            <option ng-repeat="user in ctrl.tokens" value="{{user.token}}">
+                                                {{user.token}}
                                             </option>
                                         </select>
                                     </div>
@@ -66,16 +66,16 @@
 
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="col-xs-4" ng-hide="ctrl.userIdCreationMode">
-                                <a href="#" ng-click="ctrl.createNewUserId()"> Create new userId ?</a>
+                            <div class="col-xs-4" ng-hide="ctrl.tokenCreationMode">
+                                <a href="#" ng-click="ctrl.createNewToken()"> Create new token ?</a>
                             </div>
-                            <div class="col-xs-4" ng-show="ctrl.userIdCreationMode">
+                            <div class="col-xs-4" ng-show="ctrl.tokenCreationMode">
                                 <form class="form">
                                     <div class="form-group ">
-                                        <input ng-model="ctrl.newUserId" type="text" class="form-control"
-                                               placeholder="Enter New UserId "
+                                        <input ng-model="ctrl.newToken" type="text" class="form-control"
+                                               placeholder="Enter New Token "
                                                aria-describedby="basic-addon1"></input>
-                                        <button class="btn btn-primary form-control" ng-click="ctrl.createUserId()">
+                                        <button class="btn btn-primary form-control" ng-click="ctrl.createToken()">
                                             Create
                                         </button>
                                     </div>
@@ -91,7 +91,7 @@
             </div>
         </div>
     </div>
-    <div class="row" ng-show="userId!=null" ng-controller="SettingsEditorCtrl as settingsEditorCtrl">
+    <div class="row" ng-show="token!=null" ng-controller="SettingsEditorCtrl as settingsEditorCtrl">
         <div class="col-xs-12">
             <div class="panel panel-info">
                 <!-- Default panel contents -->
@@ -99,7 +99,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6">
-                                <label> {{userId |uppercase}}'s Settings</label>
+                                <label> {{token |uppercase}}'s Settings</label>
                             </div>
                             <div class="col-md-6">
                                 <div class="col-md-1" popover="Edit settings" popover-trigger="mouseenter"

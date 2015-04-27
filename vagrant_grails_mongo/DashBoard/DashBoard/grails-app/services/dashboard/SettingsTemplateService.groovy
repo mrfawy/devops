@@ -7,9 +7,9 @@ class SettingsTemplateService {
 
     def pkg="dashboard.templates."
 
-    def createTemplateForApp(env,app,userId) {
+    def createTemplateForApp(env,app,token) {
         def template = this.class.classLoader.loadClass(pkg+app)?.newInstance()
-        template.init(env,userId)
+        template.init(env,token)
     }
 
 }

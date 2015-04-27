@@ -158,7 +158,7 @@ class SettingsService {
         }
         return result
     }
-    def generateUserSettingsForApp(env,app,userId,owner){
+    def generateTokenSettingsForApp(env,app,token,owner){
         MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
         BasicDBObject query = new BasicDBObject("name",app)
@@ -168,13 +168,13 @@ class SettingsService {
         def result=slurper.parseText("{}")
         result.env=env
         result.app=app
-        result.userId=userId
+        result.token=token
         result.owner=owner
         result.services=setting.services
         return result
     }
 
-    def loadUsers(def env,def app){
+    def loadTokens(def env,def app){
         MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
@@ -191,36 +191,36 @@ class SettingsService {
     }
 
 
-    def loadUserSettings(env,app,userId) {
+    def loadTokenSettings(env,app,token) {
         MongoDatabase database=loadDB()
         MongoCollection stgCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
-        query.append("userId",userId)
+        query.append("token",token)
         def cursor = stgCollection.find(query).projection(Projections.excludeId()).iterator()
         def item = cursor.hasNext() ? cursor.next() : null;
         return item
 
     }
-    def upsertUserSettings(setting){
+    def upsertTokenSettings(setting){
         MongoDatabase database=loadDB()
         def appsCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
 
 
         def criteria=new Document("env",setting.env)
         criteria.append("app",setting.app)
-        criteria.append("userId",setting.userId)
+        criteria.append("token",setting.token)
 
         def stgStr=setting as grails.converters.JSON
         def item = Document.parse(stgStr.toString())
         appsCollection.findOneAndReplace(criteria,item, new FindOneAndReplaceOptions(upsert: true))
     }
-    def removeUserSettings(env,app,userId){
+    def removeTokenSettings(env,app,token){
         MongoDatabase database=loadDB()
         MongoCollection stgCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
-        query.append("userId",userId)
+        query.append("token",token)
         stgCollection.deleteOne(query);
     }
 }

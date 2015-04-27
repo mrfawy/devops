@@ -20,8 +20,8 @@ app.factory('ToasterService', ['toaster', function(toaster) {
                                 showCloseButton: true
                             });
     }
-    var saveSettings = function(env, app, userId, settings) {
-        return $http.put("/settings/" + env + "/" + app + "/" + userId, settings);
+    var saveSettings = function(env, app, token, settings) {
+        return $http.put("/settings/" + env + "/" + app + "/" + token, settings);
     };
     return {
         showInfo: function(title,body) {
