@@ -22,7 +22,7 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
                     .success(function(data, status, headers) {
                         $scope.token = null;
                         if (data.length > 0) {
-                            ctrl.tokens = data;
+                            $scope.tokens = data;
                             //filter tokens to owner only
                             ctrl.showAllTokens(false);
                         }
@@ -56,10 +56,10 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
             }
         }
         ctrl.updateTokenOwner=function(){
-            if($scope.token!=null && ctrl.tokens!=null &&ctrl.tokens.length>0){
-             for(var i=0;i<ctrl.tokens.length;i++){
-                if(ctrl.tokens[i].token===$scope.token){
-                    $scope.tokenOwner=ctrl.tokens[i].owner;
+            if($scope.token!=null && $scope.tokens!=null &&$scope.tokens.length>0){
+             for(var i=0;i<$scope.tokens.length;i++){
+                if($scope.tokens[i].token===$scope.token){
+                    $scope.tokenOwner=$scope.tokens[i].owner;
                 }
              }
             }
@@ -73,13 +73,13 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
 
         ctrl.filterTokens=function(flag){
             if(!flag){
-                ctrl.filteredTokens=ctrl.tokens
+                ctrl.filteredTokens=$scope.tokens
             }
             else{
                 ctrl.filteredTokens=[]
-                for(var i=0;i<ctrl.tokens.length;i++){
-                    if(ctrl.tokens[i].owner===$scope.owner){
-                       ctrl.filteredTokens.push(ctrl.tokens[i]);
+                for(var i=0;i<$scope.tokens.length;i++){
+                    if($scope.tokens[i].owner===$scope.owner){
+                       ctrl.filteredTokens.push($scope.tokens[i]);
                     }
                 }
             }

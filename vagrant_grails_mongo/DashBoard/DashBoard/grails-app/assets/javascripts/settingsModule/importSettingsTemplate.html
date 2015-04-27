@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3 class="modal-title">Import settings</h3>
+
+    <p>Please enter backup file contents below. Settings will be merged if possible. </p>
+
+    <div>Suggested File Name : {{suggestedFileName}}</div>
+</div>
+<div class="modal-body">
+    <ul>
+        <div>
+            <form class="form">
+                <div class="form-group ">
+                    <label>Settings</label>
+                    <textarea class="form-control import-editor" ng-model="importedTokenJsonStr"></textarea>
+
+                </div>
+            </form>
+        </div>
+    </ul>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>

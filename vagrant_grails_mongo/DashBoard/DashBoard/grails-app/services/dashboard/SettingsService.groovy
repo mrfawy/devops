@@ -180,7 +180,7 @@ class SettingsService {
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
 
-        def cursor = appsCollection.find(query).projection(Projections.excludeId()).iterator()
+        def cursor = appsCollection.find(query).projection(Projections.excludeId()).sort {}.iterator()
         def result=[]
         def slurper=new JsonSlurper()
         while(cursor.hasNext()){

@@ -140,6 +140,7 @@
                                     </a>
                                 </div>
 
+
                                 <div class="col-md-1" popover="Apply cloned settings" popover-trigger="mouseenter"
                                      ng-show="cloneable">
                                     <a ng-click="settingsEditorCtrl.applyClonedSettings()">
@@ -147,6 +148,21 @@
 
                                     </a>
                                 </div>
+                                <div class="col-md-1" popover="Export settings" popover-trigger="mouseenter"
+                                     ng-hide="editable">
+                                    <a ng-click="settingsEditorCtrl.exportSettings()">
+                                        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                                    </a>
+                                </div>
+                                <div class="col-md-1" popover="Import settings" popover-trigger="mouseenter"
+                                     ng-show="editable">
+                                    <a ng-click="settingsEditorCtrl.importSettings()">
+                                        <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
+
+                                    </a>
+                                </div>
+
+
 
 
                             </div>

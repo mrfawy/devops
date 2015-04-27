@@ -1,6 +1,6 @@
 var module = angular.module('dashBoard.settingsModule');
-module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'SettingsService', 'SessionService', 'ServicePropertiesValuesService',
-    function($scope, $log, toasterService, settingsService, sessionService, servicePropertiesValuesService) {
+module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterService', 'SettingsService', 'SessionService', 'ServicePropertiesValuesService',
+    function($scope, $log, $modal, toasterService, settingsService, sessionService, servicePropertiesValuesService) {
         var ctrl = this;
         ctrl.serviceCollapsed = []
         ctrl.propertyValues = {}
@@ -15,7 +15,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
                 $log.info("isAdmin: " + $scope.isAdmin)
             });
 
-        this.refresh = function() {
+        ctrl.refresh = function() {
             settingsService.loadSettings($scope.env, $scope.app, $scope.token)
                 .success(function(data, status, headers) {
                     if (!data || data.code) {
@@ -35,9 +35,8 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
         ctrl.updateEditableState = function() {
             if ($scope.tokenOwner === $scope.owner || $scope.isAdmin) {
                 $scope.canEdit = true;
-            }
-            else{
-             $scope.canEdit = false;
+            } else {
+                $scope.canEdit = false;
             }
         }
 
@@ -108,7 +107,122 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
                 //else do nothing
             }
         }
-        ctrl.loadPropertiesValues = function(app, service) {}
+        ctrl.getActiveToken = function() {
+            if ($scope.token != null && $scope.tokens != null) {
+                var selectedToken = null;
+                for (var i = 0; i < $scope.tokens.length; i++) {
+                    if ($scope.tokens[i].token === $scope.token) {
+                        return $scope.tokens[i];
+                    }
+                }
+            }
+            return null;
+        }
+        ctrl.exportSettings = function() {
+            $scope.selectedToken = ctrl.getActiveToken();
+            //show modal containing settings data in JSON
+            if ($scope.selectedToken) {
+                var modalInstance = $modal.open({
+                    templateUrl: '/assets/settingsModule/exportSettingsTemplate.html',
+                    controller: function($scope, $modalInstance, token,settings) {
+                        $scope.token = token;
+                        $scope.settings = settings;
+                        $scope.suggestedFileName = token.env + "_" + token.app + "_" + token.token + ".json"
+                        $scope.ok = function() {
+                            $modalInstance.close();
+                        };
+                        $scope.cancel = function() {
+                            $modalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'lg',
+                    resolve: {
+                        token: function() {
+                            return $scope.selectedToken;
+                        },
+                        settings: function() {
+                                                    return ctrl.settings;
+                        }
+
+                    }
+                });
+
+            }
+
+
+        }
+        ctrl.importSettings = function() {
+            $scope.importedToken = null;
+            $scope.tobeReplacedToken = ctrl.getActiveToken();
+            var modalInstance = $modal.open({
+                templateUrl: '/assets/settingsModule/importSettingsTemplate.html',
+                controller: function($scope, $modalInstance, tobeReplacedToken) {
+                    $scope.importedTokenJsonStr = ""
+                    $scope.suggestedFileName = tobeReplacedToken.env + "_" + tobeReplacedToken.app + "_" + tobeReplacedToken.token + ".json"
+                    $scope.ok = function() {
+                        $modalInstance.close($scope.importedTokenJsonStr);
+                    };
+                    $scope.cancel = function() {
+                        $modalInstance.dismiss('cancel');
+                    };
+                },
+                size: 'lg',
+                resolve: {
+                    tobeReplacedToken: function() {
+                        return $scope.tobeReplacedToken;
+                    }
+                }
+            });
+            modalInstance.result.then(function(importedTokenJsonStr) {
+                $scope.importedTokenJsonStr = importedTokenJsonStr;
+                $log.info('Modal dismissed with : ' + $scope.importedTokenJsonStr);
+                $log.info("merging ......")
+                ctrl.merge(ctrl.settings,$scope.importedTokenJsonStr)
+            }, function() {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        ctrl.merge = function(targetToken, importedTokenJsonStr) {
+            //check if valid JSON format
+            var sourceToken = null;
+            try {
+                sourceToken = JSON.parse(importedTokenJsonStr)
+            } catch (e) {
+                toasterService.showError("Merge Settings", "Settings are not in a valid JSON format.")
+                $log.error("Settings are not in a valid JSON format.");
+                return;
+            }
+            try {
+                //match service name
+                for (var i = 0; i < targetToken.services.length; i++) {
+                    for (var j = 0; j < sourceToken.services.length;j++) {
+                        //matching service found
+                        if (targetToken.services[i].name === sourceToken.services[j].name) {
+                            $log.info("matching service found : " + targetToken.services[i].name)
+                            for (var m = 0; m < targetToken.services[i].properties.length; m++) {
+                                for (var n = 0; n < sourceToken.services[j].properties.length; n++) {
+                                    var targetProp = targetToken.services[i].properties[m];
+                                    var sourceProp = sourceToken.services[j].properties[n];
+                                    //matching property found
+                                    if (targetProp.name === sourceProp.name) {
+                                        $log.info("matching Property found : " + targetProp.name)
+                                        targetProp.value = sourceProp.value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                toasterService.showSuccess("Merge Settings", "Merged settings successfully")
+            } catch (e) {
+                $log.error(e)
+                toasterService.showError("Merge Settings", "Merge Failed , check log for details")
+            }
+
+
+        }
+
 
         $scope.$watchGroup(['app', 'env', 'token'], function(newValues, oldValues, scope) {
             if (scope.token != null && scope.env != null && scope.app != null) {
