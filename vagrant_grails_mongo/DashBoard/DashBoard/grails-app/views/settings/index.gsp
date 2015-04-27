@@ -54,7 +54,7 @@
                                     <div class="form-group ">
                                         <label class="control-label">Token</label>
                                         <select ng-model="token" class="form-control" placeholder="token" ng-change="ctrl.updateTokenOwner()">
-                                            <option ng-repeat="token in ctrl.tokens" value="{{token.token}}">
+                                            <option ng-repeat="token in ctrl.filteredTokens " value="{{token.token}}">
                                                 {{token.token}}
                                             </option>
                                         </select>
@@ -62,6 +62,18 @@
                                 </form>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-4" ng-hide="ctrl.showAllTokensMode">
+                                <a href="#" ng-click="ctrl.showAllTokens(true)"> Show all tokens ?</a>
+                            </div>
+                            <div class="col-xs-4" ng-show="ctrl.showAllTokensMode">
+                                <a href="#" ng-click="ctrl.showAllTokens(false)">Filter my tokens only</a>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="row">

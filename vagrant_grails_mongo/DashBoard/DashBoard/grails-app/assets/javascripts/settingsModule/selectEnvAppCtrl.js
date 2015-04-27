@@ -23,6 +23,8 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
                         $scope.token = null;
                         if (data.length > 0) {
                             ctrl.tokens = data;
+                            //filter tokens to owner only
+                            ctrl.showAllTokens(false);
                         }
 
                     });
@@ -62,6 +64,25 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
              }
             }
             $log.info("Token owner : "+$scope.tokenOwner);
+        }
+        ctrl.showAllTokens=function(flag){
+            ctrl.showAllTokensMode=flag;
+            ctrl.filterTokens(!flag);
+
+        };
+
+        ctrl.filterTokens=function(flag){
+            if(!flag){
+                ctrl.filteredTokens=ctrl.tokens
+            }
+            else{
+                ctrl.filteredTokens=[]
+                for(var i=0;i<ctrl.tokens.length;i++){
+                    if(ctrl.tokens[i].owner===$scope.owner){
+                       ctrl.filteredTokens.push(ctrl.tokens[i]);
+                    }
+                }
+            }
         }
 
         $scope.$watchGroup(['app', 'env'], function() {
