@@ -87,23 +87,28 @@
                         </tr>
                         </tbody>
                     </table>
-                <div class="col-xs-12" ng-hide="ctrl.createAppMode">
-                    <a href="#" ng-click="ctrl.createNewApp()"> Create new Application ?</a>
-                </div>
+                    <div class="col-xs-12" ng-hide="ctrl.createAppMode">
+                        <a href="#" ng-click="ctrl.createNewApp()"> Create new Application ?</a>
+                    </div>
                     <div class="col-xs-12" ng-show="ctrl.createAppMode">
                         <div class="panel panel-danger">
                             <div class="panel-heading">Create new Application</div>
                             <div class="panel-body">
                                 <div class="col-xs-12">
                                     <form class="form">
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>Warning!</strong>
+                                            Invalid settings could result in application failure.Please check with app developers for valid values.
+                                        </div>
                                         <div class="form-group ">
                                             <label>Name</label>
-                                            <input class="form-control"  placeholder="Enter application name "
+                                            <input class="form-control" placeholder="Enter application name "
                                                    aria-describedby="basic-addon1" ng-model="ctrl.newApp.name"></input>
                                         </div>
                                         <div class="form-group ">
                                             <label>Services</label>
-                                            <textarea class="form-control editor" ng-model="ctrl.newApp.services"></textarea>
+                                            <textarea class="form-control editor"
+                                                      ng-model="ctrl.newApp.services"></textarea>
 
                                         </div>
                                     </form>
@@ -111,7 +116,7 @@
                             </div>
                             <div class="panel-footer panel-danger">
                                 <button class="btn btn-primary" ng-click="ctrl.createApp()">Create</button>
-                                <button class="btn btn-success"  ng-click="ctrl.reset()">Cancel</button>
+                                <button class="btn btn-success" ng-click="ctrl.reset()">Cancel</button>
                             </div>
                         </div>
                     </div>
