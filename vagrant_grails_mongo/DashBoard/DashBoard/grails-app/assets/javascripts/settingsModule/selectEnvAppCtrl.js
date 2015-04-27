@@ -5,7 +5,8 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
 
         sessionService.loadSessionData().success(
             function(data, status, headers) {
-                ctrl.owner = data.session.userName;
+                $scope.owner = data.session.userName;
+                $scope.isAdmin=data.session.isAdmin
             });
         loadService.loadData("envs")
             .success(function(data, status, headers) {
@@ -51,6 +52,16 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
                 toasterService.showWarning("Create Token", "Missing Token");
                 $log.error("Missing Token")
             }
+        }
+        ctrl.updateTokenOwner=function(){
+            if($scope.token!=null && ctrl.tokens!=null &&ctrl.tokens.length>0){
+             for(var i=0;i<ctrl.tokens.length;i++){
+                if(ctrl.tokens[i].token===$scope.token){
+                    $scope.tokenOwner=ctrl.tokens[i].owner;
+                }
+             }
+            }
+            $log.info("Token owner : "+$scope.tokenOwner);
         }
 
         $scope.$watchGroup(['app', 'env'], function() {

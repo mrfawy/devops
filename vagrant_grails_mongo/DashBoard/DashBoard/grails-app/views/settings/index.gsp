@@ -53,9 +53,9 @@
                                 <form class="form">
                                     <div class="form-group ">
                                         <label class="control-label">Token</label>
-                                        <select ng-model="token" class="form-control" placeholder="token">
-                                            <option ng-repeat="user in ctrl.tokens" value="{{user.token}}">
-                                                {{user.token}}
+                                        <select ng-model="token" class="form-control" placeholder="token" ng-change="ctrl.updateTokenOwner()">
+                                            <option ng-repeat="token in ctrl.tokens" value="{{token.token}}">
+                                                {{token.token}}
                                             </option>
                                         </select>
                                     </div>
@@ -103,8 +103,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="col-md-1" popover="Edit settings" popover-trigger="mouseenter"
-                                     ng-hide="editable">
-                                    <a ng-click="settingsEditorCtrl.editSettings()">
+                                     ng-hide="editable || !canEdit" >
+                                    <a ng-click="settingsEditorCtrl.editSettings()" >
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                     </a>
                                 </div>

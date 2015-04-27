@@ -16,7 +16,7 @@ class SecurityInterceptor implements Interceptor,Controller {
     }
 
     boolean before() {
-        println "checking authentication for  action ${actionName} , @ ${controllerName}"
+        //println "checking authentication for  action ${actionName} , @ ${controllerName}"
         try{
             if (!session?.authenticated ||(controllerName=="admin" && !session?.isAdmin)) {
                     response.status = 500

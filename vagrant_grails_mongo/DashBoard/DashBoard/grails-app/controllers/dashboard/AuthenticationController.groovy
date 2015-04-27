@@ -11,6 +11,7 @@ class AuthenticationController {
         def user=authenticationService.authenticateUser(params.userName,params.password)
         if(user){
             session.authenticated=true
+            session.isAdmin=false
             session.userName=params.userName
             if(user.get("role")=="admin"){
                 session.isAdmin=true
@@ -28,6 +29,7 @@ class AuthenticationController {
         def builder = new groovy.json.JsonBuilder()
         def s = builder.session {
             userName session?.userName
+            isAdmin session?.isAdmin
         }
         render s as JSON
 

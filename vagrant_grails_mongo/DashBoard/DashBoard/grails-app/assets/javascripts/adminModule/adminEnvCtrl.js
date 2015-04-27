@@ -1,5 +1,5 @@
 var module = angular.module('dashBoard.adminModule');
-module.controller('AdminEnvController', ['$scope', '$log', 'ToasterService', 'SessionService', 'envService',
+module.controller('AdminEnvController', ['$scope', '$log', 'ToasterService', 'envService',
     function($scope, $log, toasterService, envService) {
         var ctrl = this;
 

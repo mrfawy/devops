@@ -1,12 +1,19 @@
 var module = angular.module('dashBoard.settingsModule');
-module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'SettingsService','ServicePropertiesValuesService',
-    function($scope, $log, toasterService, settingsService,servicePropertiesValuesService) {
+module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'SettingsService', 'SessionService', 'ServicePropertiesValuesService',
+    function($scope, $log, toasterService, settingsService, sessionService, servicePropertiesValuesService) {
         var ctrl = this;
-        ctrl.serviceCollapsed=[]
-        ctrl.propertyValues={}
-        ctrl.propertyValues.values=[]
+        ctrl.serviceCollapsed = []
+        ctrl.propertyValues = {}
+        ctrl.propertyValues.values = []
 
-        $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+        sessionService.loadSessionData().success(
+            function(data, status, headers) {
+                $scope.owner = data.session.userName;
+                $scope.isAdmin = data.session.isAdmin;
+
+                $log.info("owner: " + $scope.owner)
+                $log.info("isAdmin: " + $scope.isAdmin)
+            });
 
         this.refresh = function() {
             settingsService.loadSettings($scope.env, $scope.app, $scope.token)
@@ -15,8 +22,8 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
                         ctrl.settings = null;
                     } else {
                         ctrl.settings = data;
-                        for(var i=0;i<ctrl.settings.services.length;i++){
-                            ctrl.serviceCollapsed[ctrl.settings.services[i].name]=true;
+                        for (var i = 0; i < ctrl.settings.services.length; i++) {
+                            ctrl.serviceCollapsed[ctrl.settings.services[i].name] = true;
                         }
 
                     }
@@ -25,10 +32,19 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
                 });
         };
 
+        ctrl.updateEditableState = function() {
+            if ($scope.tokenOwner === $scope.owner || $scope.isAdmin) {
+                $scope.canEdit = true;
+            }
+            else{
+             $scope.canEdit = false;
+            }
+        }
+
         ctrl.editSettings = function() {
-            $scope.editable=true;
-            if($scope.clonedSettings){
-                ctrl.cloneable=true;
+            $scope.editable = true;
+            if ($scope.clonedSettings) {
+                ctrl.cloneable = true;
             }
         }
         ctrl.saveSettings = function() {
@@ -45,17 +61,18 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
         }
         ctrl.cloneSettings = function() {
             $scope.clonedSettings = ctrl.clone(ctrl.settings);
-            $scope.clonedSettingsApp=$scope.app
+            $scope.clonedSettingsApp = $scope.app
             toasterService.showInfo('Cloning', 'Cloned settings successfully');
         }
-        ctrl.updateCloneableState=function(){
-            if($scope.clonedSettings ==null ||  $scope.app!=$scope.clonedSettingsApp){
-               //reset clone
-               $scope.clonedSettings=null;
-               $scope.clonedSettingsApp=null;
+        ctrl.updateCloneableState = function() {
+            if ($scope.clonedSettings == null || $scope.app != $scope.clonedSettingsApp) {
+                //reset clone
+                $scope.clonedSettings = null;
+                $scope.clonedSettingsApp = null;
             }
 
         }
+
         ctrl.applyClonedSettings = function() {
             if ($scope.clonedSettings) {
                 if ($scope.clonedSettings.app === ctrl.settings.app) {
@@ -69,47 +86,45 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
                 $log.error("can't clone to different app");
             }
         }
-        ctrl.checkPropertiesValues=function(app,service,property){
-            if(!ctrl.propertyValues){
-                ctrl.propertyValues={}
-                ctrl.propertyValues.service=service
-                ctrl.propertyValues.app=app
-                 servicePropertiesValuesService.loadServiceProperties(app, service)
-                                .success(function(data, status, headers) {
-                                    ctrl.propertyValues.values=data
-                                });
-            }
-            else{
-                if(ctrl.propertyValues.service!=service ||ctrl.propertyValues.app!=app){
-                    ctrl.propertyValues={}
-                                    ctrl.propertyValues.service=service
-                                    ctrl.propertyValues.app=app
-                                     servicePropertiesValuesService.loadServiceProperties(app, service)
-                                                    .success(function(data, status, headers) {
-                                                        ctrl.propertyValues.values=data
-                                                    });
+        ctrl.checkPropertiesValues = function(app, service, property) {
+            if (!ctrl.propertyValues) {
+                ctrl.propertyValues = {}
+                ctrl.propertyValues.service = service
+                ctrl.propertyValues.app = app
+                servicePropertiesValuesService.loadServiceProperties(app, service)
+                    .success(function(data, status, headers) {
+                        ctrl.propertyValues.values = data
+                    });
+            } else {
+                if (ctrl.propertyValues.service != service || ctrl.propertyValues.app != app) {
+                    ctrl.propertyValues = {}
+                    ctrl.propertyValues.service = service
+                    ctrl.propertyValues.app = app
+                    servicePropertiesValuesService.loadServiceProperties(app, service)
+                        .success(function(data, status, headers) {
+                            ctrl.propertyValues.values = data
+                        });
                 }
                 //else do nothing
             }
         }
-        ctrl.loadPropertiesValues=function(app,service){
-        }
+        ctrl.loadPropertiesValues = function(app, service) {}
 
         $scope.$watchGroup(['app', 'env', 'token'], function(newValues, oldValues, scope) {
             if (scope.token != null && scope.env != null && scope.app != null) {
                 ctrl.refresh();
                 ctrl.updateCloneableState();
+                ctrl.updateEditableState();
             } else {
                 ctrl.settings = null;
             }
 
         });
-        $scope.$watchGroup(['clonedSettings','editable'],function(newValues,oldValues,scope){
-            if($scope.clonedSettings !=null && scope.editable ){
-                $scope.cloneable=true;
-            }
-            else{
-                $scope.cloneable=false;
+        $scope.$watchGroup(['clonedSettings', 'editable'], function(newValues, oldValues, scope) {
+            if ($scope.clonedSettings != null && scope.editable) {
+                $scope.cloneable = true;
+            } else {
+                $scope.cloneable = false;
             }
         });
     }
@@ -139,7 +154,7 @@ module.factory('ServicePropertiesValuesService', ['$http', function($http) {
     var loadServiceProperties = function(app, service) {
         return $http({
             method: 'GET',
-            url: "/analytics/values/"+app+"/"+ service
+            url: "/analytics/values/" + app + "/" + service
         });
     };
 
