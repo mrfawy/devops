@@ -158,7 +158,7 @@ class SettingsService {
         }
         return result
     }
-    def generateUserSettingsForApp(env,app,userId){
+    def generateUserSettingsForApp(env,app,userId,owner){
         MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
         BasicDBObject query = new BasicDBObject("name",app)
@@ -169,6 +169,7 @@ class SettingsService {
         result.env=env
         result.app=app
         result.userId=userId
+        result.owner=owner
         result.services=setting.services
         return result
     }

@@ -16,6 +16,8 @@ class UrlMappings {
 
         "/users/$user?/$role?"(controller:"setup" , action:[GET:"loadUsers",POST:"createUser",PUT:"assignUsertoRole",DELETE:"removeUser"])
 
+        "/session/" (controller:"authentication" , action:"loadSessionData")
+
 
         "/analytics/values/$app/$service/$property?" (controller:"analytics" , action:"retrieveStoredValuesForProperty")
 

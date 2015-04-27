@@ -40,6 +40,7 @@
     <asset:stylesheet src="application.css"/>
 
     <asset:javascript src="toasterService.js"/>
+    <asset:javascript src="sessionService.js"/>
 
 
     <asset:javascript src="/settingsModule/settingsModule.js"/>

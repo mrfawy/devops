@@ -1,5 +1,7 @@
 package dashboard
 
+import grails.converters.JSON
+
 class AuthenticationController {
     def authenticationService
 
@@ -9,6 +11,7 @@ class AuthenticationController {
         def user=authenticationService.authenticateUser(params.userName,params.password)
         if(user){
             session.authenticated=true
+            session.userName=params.userName
             if(user.get("role")=="admin"){
                 session.isAdmin=true
             }
@@ -19,6 +22,14 @@ class AuthenticationController {
             request.error="Invalid user name or passowrd ."
             render(view: "index")
         }
+
+    }
+    def loadSessionData(){
+        def builder = new groovy.json.JsonBuilder()
+        def s = builder.session {
+            userName session?.userName
+        }
+        render s as JSON
 
     }
     def register(){

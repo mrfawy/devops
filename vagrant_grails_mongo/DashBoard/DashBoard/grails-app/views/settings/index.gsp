@@ -160,12 +160,12 @@
                                     </tr>
                                 </table>
 
-                                <div class="panel panel-info" ng-show="editable">
-                                    <div class="panel-heading">
+                                <div class="panel panel-info" ng-show="editable" >
+                                    <div class="panel-heading" ng-click="settingsEditorCtrl.serviceCollapsed[service.name]=!settingsEditorCtrl.serviceCollapsed[service.name]">
                                         <label>Service: {{service.name}}</label>
                                     </div>
                                     <div class="col-xs-12">
-                                        <form class="form">
+                                        <form class="form" collapse="settingsEditorCtrl.serviceCollapsed[service.name]">
                                             <div class="form-group" ng-repeat="property in service.properties" >
                                                 <label class="control-label">{{property.name}}</label>
                                                 <input type="text" ng-model="property.value" typeahead="val for val in settingsEditorCtrl.propertyValues.values[property.name] | filter:$viewValue "

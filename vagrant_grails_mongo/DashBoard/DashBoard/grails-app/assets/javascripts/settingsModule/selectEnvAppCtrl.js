@@ -1,7 +1,12 @@
 var module = angular.module('dashBoard.settingsModule');
-module.controller('SelectEnvAppCtrl', ['$scope', '$log','ToasterService', 'loadService', 'userIdsService',
-    function($scope, $log,toasterService, loadService, userIdsService) {
+module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'loadService', 'SessionService', 'userIdsService',
+    function($scope, $log, toasterService, loadService, sessionService, userIdsService) {
         var ctrl = this;
+
+        sessionService.loadSessionData().success(
+            function(data, status, headers) {
+                ctrl.owner = data.session.userName;
+            });
         loadService.loadData("envs")
             .success(function(data, status, headers) {
                 ctrl.envs = data;
@@ -15,7 +20,7 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log','ToasterService', 'loadS
                 userIdsService.loadUserIds($scope.env, $scope.app)
                     .success(function(data, status, headers) {
                         $scope.userId = null;
-                        if(data.length>0){
+                        if (data.length > 0) {
                             ctrl.userIds = data;
                         }
 
@@ -24,26 +29,26 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log','ToasterService', 'loadS
 
 
         }
-        ctrl.userIdCreationMode=false;
-        ctrl.createNewUserId=function(){
-            ctrl.userIdCreationMode=true;
+        ctrl.userIdCreationMode = false;
+        ctrl.createNewUserId = function() {
+            ctrl.userIdCreationMode = true;
         }
         ctrl.createUserId = function() {
             if (ctrl.newUserId) {
-                userIdsService.createUserId($scope.env, $scope.app, ctrl.newUserId)
+                userIdsService.createUserId($scope.env, $scope.app, ctrl.newUserId,ctrl.owner)
                     .success(function(data, status, headers) {
                         $log.info("added userID successfully");
-                        toasterService.showInfo("Create UserId","UserId created , check userId list");
+                        toasterService.showInfo("Create UserId", "UserId created , check userId list");
                         ctrl.loadUserIds();
-                        ctrl.newUserId=null;
-                        ctrl.userIdCreationMode=false;
+                        ctrl.newUserId = null;
+                        ctrl.userIdCreationMode = false;
                     });
             } else {
-            if($scope.env==null||$scope.app==null){
-                 toasterService.showWarning("Create UserId","Please select Environment and Application first");
-                 $log.error("Please select Environment and App first")
-            }
-                toasterService.showWarning("Create UserId","Missing UserId");
+                if ($scope.env == null || $scope.app == null) {
+                    toasterService.showWarning("Create UserId", "Please select Environment and Application first");
+                    $log.error("Please select Environment and App first")
+                }
+                toasterService.showWarning("Create UserId", "Missing UserId");
                 $log.error("Missing UserId")
             }
         }
@@ -73,15 +78,17 @@ module.factory('userIdsService', ['$http', function($http) {
     var loadUserIds = function(env, app) {
         return $http.get("/userIds/" + env + "/" + app);
     }
-    var createUserId = function(env, app, userId) {
-        return $http.post("/settings/" + env + "/" + app + "/" + userId);
+    var createUserId = function(env, app, userId, owner) {
+        return $http.post("/settings/" + env + "/" + app + "/" + userId, {
+            "owner": owner
+        });
     }
     return {
         loadUserIds: function(env, app) {
             return loadUserIds(env, app);
         },
-        createUserId: function(env, app, userId) {
-            return createUserId(env, app, userId);
+        createUserId: function(env, app, userId, owner) {
+            return createUserId(env, app, userId, owner);
         },
     };
 }]);

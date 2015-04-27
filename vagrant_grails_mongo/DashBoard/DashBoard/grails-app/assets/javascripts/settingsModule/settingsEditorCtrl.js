@@ -2,6 +2,7 @@ var module = angular.module('dashBoard.settingsModule');
 module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'SettingsService','ServicePropertiesValuesService',
     function($scope, $log, toasterService, settingsService,servicePropertiesValuesService) {
         var ctrl = this;
+        ctrl.serviceCollapsed=[]
         ctrl.propertyValues={}
         ctrl.propertyValues.values=[]
 
@@ -14,6 +15,10 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', 'ToasterService', 'Se
                         ctrl.settings = null;
                     } else {
                         ctrl.settings = data;
+                        for(var i=0;i<ctrl.settings.services.length;i++){
+                            ctrl.serviceCollapsed[ctrl.settings.services[i].name]=true;
+                        }
+
                     }
                     $scope.editable = false;
 

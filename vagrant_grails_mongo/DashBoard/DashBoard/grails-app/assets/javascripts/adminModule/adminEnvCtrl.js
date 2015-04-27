@@ -1,6 +1,6 @@
 var module = angular.module('dashBoard.adminModule');
-module.controller('AdminEnvController', ['$scope', '$log','ToasterService', 'envService',
-    function($scope, $log,toasterService, envService) {
+module.controller('AdminEnvController', ['$scope', '$log', 'ToasterService', 'SessionService', 'envService',
+    function($scope, $log, toasterService, envService) {
         var ctrl = this;
 
         ctrl.refresh = function() {
@@ -9,28 +9,29 @@ module.controller('AdminEnvController', ['$scope', '$log','ToasterService', 'env
 
                     ctrl.envs = data;
                 });
+
         };
-        ctrl.envCreationMode=false;
-        ctrl.createNewEnv=function(){
-            ctrl.envCreationMode=true;
+        ctrl.envCreationMode = false;
+        ctrl.createNewEnv = function() {
+            ctrl.envCreationMode = true;
         }
         ctrl.createEnv = function(env) {
-            if(!env){
-                 toasterService.showWarning("Environment","Environment name is missing")
-                 return;
+            if (!env) {
+                toasterService.showWarning("Environment", "Environment name is missing")
+                return;
             }
             envService.createEnv(env).success(
                 function(data, status, headers) {
-                    toasterService.showSuccess("Environment","Environment "+env+" created successfully")
+                    toasterService.showSuccess("Environment", "Environment " + env + " created successfully")
                     $log.info("Environment created successfully");
-                    ctrl.envCreationMode=false;
-                    ctrl.newEnv=null;
+                    ctrl.envCreationMode = false;
+                    ctrl.newEnv = null;
                     ctrl.refresh();
                 });
         }
         ctrl.removeEnv = function(env) {
             envService.removeEnv(env).success(function(data, status, headers) {
-                toasterService.showSuccess("Environment","Environment "+env+" removed successfully")
+                toasterService.showSuccess("Environment", "Environment " + env + " removed successfully")
                 $log.info("env removed successfully");
                 ctrl.refresh();
             });

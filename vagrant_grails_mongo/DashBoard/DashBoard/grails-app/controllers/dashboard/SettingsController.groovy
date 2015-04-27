@@ -8,6 +8,7 @@ import org.codehaus.groovy.runtime.powerassert.AssertionRenderer
 
 class SettingsController {
 
+
     SettingsTemplateService settingsTemplateService
     SettingsService settingsService
 
@@ -16,8 +17,8 @@ class SettingsController {
     }
 
     def createUserSettings(){
-
-        def template=settingsService.generateUserSettingsForApp(params.env,params.app,params.userId)
+        def r=request.JSON
+        def template=settingsService.generateUserSettingsForApp(params.env,params.app,params.userId,r.owner)
         settingsService.upsertUserSettings(template)
         render ControllerResponse.success() as JSON
     }
