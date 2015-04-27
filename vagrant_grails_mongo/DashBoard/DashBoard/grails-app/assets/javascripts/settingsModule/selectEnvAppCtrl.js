@@ -6,7 +6,7 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
         sessionService.loadSessionData().success(
             function(data, status, headers) {
                 $scope.owner = data.session.userName;
-                $scope.isAdmin=data.session.isAdmin
+                $scope.isAdmin = data.session.isAdmin
             });
         loadService.loadData("envs")
             .success(function(data, status, headers) {
@@ -37,49 +37,56 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
             ctrl.tokenCreationMode = true;
         }
         ctrl.createToken = function() {
-            if (ctrl.newToken) {
-                tokenService.createToken($scope.env, $scope.app, ctrl.newToken,ctrl.owner)
-                    .success(function(data, status, headers) {
-                        $log.info("added Token successfully");
-                        toasterService.showInfo("Create Token", "Token created , check Token list");
-                        ctrl.loadTokens();
-                        ctrl.newToken = null;
-                        ctrl.tokenCreationMode = false;
-                    });
-            } else {
-                if ($scope.env == null || $scope.app == null) {
-                    toasterService.showWarning("Create Token", "Please select Environment and Application first");
-                    $log.error("Please select Environment and App first")
-                }
+            if (!ctrl.newToken) {
                 toasterService.showWarning("Create Token", "Missing Token");
                 $log.error("Missing Token")
+                return
             }
+            if (ctrl.newToken.indexOf(' ') >= 0) {
+                toasterService.showWarning("Create Token", "Token Can't contain spaces");
+                $log.error("Token Can't contain spaces")
+                return;
+            }
+            if ($scope.env == null || $scope.app == null) {
+                toasterService.showWarning("Create Token", "Please select Environment and Application first");
+                $log.error("Please select Environment and App first")
+            }
+
+            //create Token
+            tokenService.createToken($scope.env, $scope.app, ctrl.newToken, $scope.owner)
+                .success(function(data, status, headers) {
+                    $log.info("added Token successfully");
+                    toasterService.showInfo("Create Token", "Token created , check Token list");
+                    ctrl.loadTokens();
+                    ctrl.newToken = null;
+                    ctrl.tokenCreationMode = false;
+                });
+
         }
-        ctrl.updateTokenOwner=function(){
-            if($scope.token!=null && $scope.tokens!=null &&$scope.tokens.length>0){
-             for(var i=0;i<$scope.tokens.length;i++){
-                if($scope.tokens[i].token===$scope.token){
-                    $scope.tokenOwner=$scope.tokens[i].owner;
+        ctrl.updateTokenOwner = function() {
+            if ($scope.token != null && $scope.tokens != null && $scope.tokens.length > 0) {
+                for (var i = 0; i < $scope.tokens.length; i++) {
+                    if ($scope.tokens[i].token === $scope.token) {
+                        $scope.tokenOwner = $scope.tokens[i].owner;
+                    }
                 }
-             }
             }
-            $log.info("Token owner : "+$scope.tokenOwner);
+            $log.info("Token owner : " + $scope.tokenOwner);
         }
-        ctrl.showAllTokens=function(flag){
-            ctrl.showAllTokensMode=flag;
+        ctrl.showAllTokens = function(flag) {
+            ctrl.showAllTokensMode = flag;
             ctrl.filterTokens(!flag);
 
         };
 
-        ctrl.filterTokens=function(flag){
-            if(!flag){
-                ctrl.filteredTokens=$scope.tokens
-            }
-            else{
-                ctrl.filteredTokens=[]
-                for(var i=0;i<$scope.tokens.length;i++){
-                    if($scope.tokens[i].owner===$scope.owner){
-                       ctrl.filteredTokens.push($scope.tokens[i]);
+        ctrl.filterTokens = function(flag) {
+            if (!flag) {
+                ctrl.filteredTokens = $scope.tokens
+            } else {
+                ctrl.filteredTokens = []
+                for (var i = 0; i < $scope.tokens.length; i++) {
+                    if ($scope.tokens[i].owner === $scope.owner) {
+                        ctrl.filteredTokens.push($scope.tokens[i]);
                     }
                 }
             }
