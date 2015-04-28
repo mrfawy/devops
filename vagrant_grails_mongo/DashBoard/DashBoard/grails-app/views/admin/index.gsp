@@ -5,10 +5,44 @@
 <body>
 <div class="container" ng-controller="SelectEnvAppCtrl as ctrl">
     <div class="row">
+        <div class="col-xs-12">
+            <nav class="navbar navbar-default ">
+
+                <div class="navbar-header">
+                    <a id="home" class="navbar-brand" href="#">Welcome {{owner}}</a>
+                </div>
+                <div class="collapse navbar-collapse navHeaderCollapse">
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <g:link controller="settings" action="index">
+											<span class="glyphicon glyphicon-list-alt"
+                                                  aria-hidden="true"></span>  Settings
+                            </g:link>
+                        </li>
+
+                        <li>
+                            <g:link controller="authentication" action="logout">
+											<span class="glyphicon glyphicon-log-out btnIcon "
+                                                  aria-hidden="true"></span>  Sign out
+                            </g:link>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </nav>
+
+        </div>
+
+    </div>
+    <div class="row">
         <div class="col-sm-10">
             <div class="jumbotron-info">
-                <div>
-                    <h1>Admin Console</h1>
+                <div class="page-header">
+                    <h1>Admin Console
+                        <small>Dashboard Administration tasks</small>
+                    </h1>
                 </div>
 
 
@@ -98,7 +132,8 @@
                                     <form class="form">
                                         <div class="alert alert-danger" role="alert">
                                             <strong>Warning!</strong>
-                                            Invalid settings could result in application failure.Please check with app developers for valid values.
+                                            Invalid settings could result in application failure.Please check with app
+                                            developers for valid values.
                                         </div>
                                         <div class="form-group ">
                                             <label>Name</label>
@@ -139,7 +174,9 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="user in ctrl.adminUsers">
-                            <td> {{user.name}}</td>
+                            <td> {{user.name}}    <span class="badge" tooltip-placement="top"
+                                                        tooltip="Number of tokens owned by {{user.name}}.">{{ctrl.tokenCount[user.name]}}</span>
+                            </td>
                             <td>
                                 <button ng-click="ctrl.toggleRole(user)" class="btn btn-primary"
                                         tooltip-placement="left"
@@ -169,7 +206,9 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="user in ctrl.normalUsers">
-                            <td> {{user.name}}</td>
+                            <td> {{user.name}}    <span class="badge" tooltip-placement="top"
+                                                        tooltip="Number of tokens owned by {{user.name}}.">{{ctrl.tokenCount[user.name]}}</span>
+                            </td>
                             <td>
                                 <button ng-click="ctrl.toggleRole(user)" class="btn btn-warning"
                                         tooltip-placement="left"

@@ -61,4 +61,19 @@ class AnalyticsService {
 
 
     }
+
+    def countOwnedTokens(owners){
+        MongoDatabase database = loadDB()
+        MongoCollection<Document> settingsCollection = database.getCollection(COLLECTION_USER_SETTINGS)
+        def result=[:]
+        owners.each{
+            Document query = new Document("owner",it)
+            def count=settingsCollection.find(query).size()
+            result[it]=count
+        }
+        return result
+
+
+
+    }
 }

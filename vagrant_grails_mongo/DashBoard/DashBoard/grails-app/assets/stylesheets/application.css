@@ -25,7 +25,7 @@
       color:#31708f;
 
 }
-.service-table td,th{
+.service-table td,.service-table th{
       text-align: center;
       width: 50%;
 }

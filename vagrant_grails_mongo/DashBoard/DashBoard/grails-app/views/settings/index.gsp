@@ -3,7 +3,42 @@
     <meta name="layout" content="main"/>
 </head>
 <body>
+
 <div class="container" ng-controller="SelectEnvAppCtrl as ctrl">
+    <div class="row">
+        <div class="col-xs-12">
+            <nav class="navbar navbar-default ">
+
+                <div class="navbar-header">
+                    <a id="home" class="navbar-brand" href="#">Welcome {{owner}}</a>
+                </div>
+                <div class="collapse navbar-collapse navHeaderCollapse">
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <g:if test="${session.isAdmin}">
+                            <li>
+                                <g:link controller="admin" action="index">
+											<span class="glyphicon glyphicon-cog "
+                                                  aria-hidden="true"></span>  Administration
+                                </g:link>
+                            </li>
+
+                        </g:if>
+                        <li>
+                            <g:link controller="authentication" action="logout">
+											<span class="glyphicon glyphicon-log-out btnIcon "
+                                                  aria-hidden="true"></span>  Sign out
+                            </g:link>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </nav>
+
+        </div>
+
+    </div>
     <div class="row">
         <div class="col-sm-10">
             <div class="jumbotron-info">
@@ -53,7 +88,8 @@
                                 <form class="form">
                                     <div class="form-group ">
                                         <label class="control-label">Token</label>
-                                        <select ng-model="token" class="form-control" placeholder="token" ng-change="ctrl.updateTokenOwner()">
+                                        <select ng-model="token" class="form-control" placeholder="token"
+                                                ng-change="ctrl.updateTokenOwner()">
                                             <option ng-repeat="token in ctrl.filteredTokens " value="{{token.token}}">
                                                 {{token.token}}
                                             </option>
@@ -115,8 +151,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="col-md-1" popover="Edit settings" popover-trigger="mouseenter"
-                                     ng-hide="editable || !canEdit" >
-                                    <a ng-click="settingsEditorCtrl.editSettings()" >
+                                     ng-hide="editable || !canEdit">
+                                    <a ng-click="settingsEditorCtrl.editSettings()">
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                     </a>
                                 </div>
@@ -163,8 +199,6 @@
                                 </div>
 
 
-
-
                             </div>
                         </div>
 
@@ -188,17 +222,20 @@
                                     </tr>
                                 </table>
 
-                                <div class="panel panel-info" ng-show="editable" >
-                                    <div class="panel-heading" ng-click="settingsEditorCtrl.serviceCollapsed[service.name]=!settingsEditorCtrl.serviceCollapsed[service.name]">
+                                <div class="panel panel-info" ng-show="editable">
+                                    <div class="panel-heading"
+                                         ng-click="settingsEditorCtrl.serviceCollapsed[service.name]=!settingsEditorCtrl.serviceCollapsed[service.name]">
                                         <label>Service: {{service.name}}</label>
                                     </div>
                                     <div class="col-xs-12">
                                         <form class="form" collapse="settingsEditorCtrl.serviceCollapsed[service.name]">
-                                            <div class="form-group" ng-repeat="property in service.properties" >
+                                            <div class="form-group" ng-repeat="property in service.properties">
                                                 <label class="control-label">{{property.name}}</label>
-                                                <input type="text" ng-model="property.value" typeahead="val for val in settingsEditorCtrl.propertyValues.values[property.name] | filter:$viewValue "
+                                                <input type="text" ng-model="property.value"
+                                                       typeahead="val for val in settingsEditorCtrl.propertyValues.values[property.name] | filter:$viewValue "
                                                        class="form-control"
-                                                       ng-show="editable" ng-focus="settingsEditorCtrl.checkPropertiesValues(app,service.name,property.name)"/>
+                                                       ng-show="editable"
+                                                       ng-focus="settingsEditorCtrl.checkPropertiesValues(app,service.name,property.name)"/>
                                             </div>
 
                                         </form>

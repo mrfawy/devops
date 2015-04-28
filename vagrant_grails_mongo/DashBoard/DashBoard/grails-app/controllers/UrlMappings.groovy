@@ -20,6 +20,7 @@ class UrlMappings {
 
 
         "/analytics/values/$app/$service/$property?" (controller:"analytics" , action:"retrieveStoredValuesForProperty")
+        "/analytics/countOwnedTokens" (controller:"analytics" , action:[POST:"countOwnedTokens"])
 
 
         "/$controller/$action?/$id?(.$format)?"{

@@ -3,17 +3,47 @@ module.controller('AdminUserController', ['$scope', '$log','ToasterService', 'us
     function($scope, $log,toasterService, userService) {
         var ctrl = this;
 
+
         ctrl.refresh = function() {
+            ctrl.userNames=[];
             userService.loadUsers("admin").success(
                 function(data, status, headers) {
                     ctrl.adminUsers = data;
+                    var adminUserNames=[]
+                    for(var i=0;i<ctrl.adminUsers.length;i++){
+                        var userName=ctrl.adminUsers[i].name
+                        adminUserNames.push(userName)
+                        ctrl.userNames.push(userName)
+                    }
+                    ctrl.countOwnedTokens(adminUserNames)
                 });
             userService.loadUsers("user").success(
                 function(data, status, headers) {
-
                     ctrl.normalUsers = data;
+                    var normalUserNames=[]
+                     for(var i=0;i<ctrl.normalUsers.length;i++){
+                        var userName=ctrl.normalUsers[i].name;
+                        normalUserNames.push(userName)
+                                            ctrl.userNames.push(userName)
+                                        }
+                                        ctrl.countOwnedTokens(normalUserNames)
                 });
         };
+        ctrl.countOwnedTokens=function(ownerList){
+            userService.countOwnedTokens(ownerList).success(
+                            function(data, status, headers) {
+                            if(!ctrl.tokenCount){
+                                ctrl.tokenCount={};
+                            }
+
+                                for (var userName in data) {
+                                  if (data.hasOwnProperty(userName)) {
+                                    ctrl.tokenCount[userName]=data[userName];
+                                  }
+                                }
+
+                            });
+        }
         ctrl.toggleRole = function(user) {
             var role = user.role;
             if (role === "admin") {
@@ -63,7 +93,12 @@ module.factory('userService', ['$http', function($http) {
     };
     var assignUsertoRole = function(user, role) {
         return $http.put("/users/" + user + "/" + role);
-    }
+    };
+    var countOwnedTokens=function(ownerList){
+         var body={}
+         body.owners=ownerList
+         return $http.post("/analytics/countOwnedTokens",body);
+    };
     return {
         loadUsers: function(role) {
             return loadUsers(role);
@@ -73,6 +108,10 @@ module.factory('userService', ['$http', function($http) {
         },
         assignUsertoRole: function(user, role) {
             return assignUsertoRole(user, role);
+        },
+        countOwnedTokens:function(ownerList){
+            return countOwnedTokens(ownerList);
         }
     };
 }]);
+
