@@ -67,6 +67,7 @@ module.controller('AdminUserController', ['$scope', '$log', '$modal', 'ToasterSe
                     ctrl.refresh();
                 }).error(function(data, status, headers, config) {
                                   toasterService.showError("Service Error", data);
+                              });
 
         }
 
