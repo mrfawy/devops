@@ -17,8 +17,12 @@ module.controller('AdminEnvController', ['$scope', '$log', 'ToasterService', 'en
         }
         ctrl.createEnv = function(env) {
             if (!env) {
-                toasterService.showWarning("Environment", "Environment name is missing")
+                toasterService.showWarning("Environment", "Environment name is missing.")
                 return;
+            }
+            if(env.indexOf(" ")>0){
+            toasterService.showWarning("Environment", "Environment name can't contain spaces.")
+                            return;
             }
             envService.createEnv(env).success(
                 function(data, status, headers) {

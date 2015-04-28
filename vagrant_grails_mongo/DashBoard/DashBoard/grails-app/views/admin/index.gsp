@@ -170,6 +170,7 @@
                             <th>User Name</th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -180,13 +181,20 @@
                             <td>
                                 <button ng-click="ctrl.toggleRole(user)" class="btn btn-primary"
                                         tooltip-placement="left"
-                                        tooltip="Will make {{user.name}} a normal user">Non Admin
+                                        tooltip="Removes {{user.name}} From Admins group">Non Admin
                                 </button>
                             </td>
                             <td>
+                                <button ng-click="ctrl.changeUserPasswordModal(user.name)" class="btn btn-primary"
+                                        tooltip-placement="top"
+                                        tooltip="Changes {{user.name}}'s password">Change Password
+                                </button>
+                            </td>
+
+                            <td>
                                 <button ng-click="ctrl.removeUser(user)" class="btn btn-danger"
                                         tooltip-placement="right"
-                                        tooltip="Will remove {{user.name}} and all it's settings as well.">remove
+                                        tooltip="Removes {{user.name}} and all it's settings as well.">remove
                                 </button>
                             </td>
                         </tr>
@@ -202,6 +210,7 @@
                             <th>User Name</th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -212,13 +221,19 @@
                             <td>
                                 <button ng-click="ctrl.toggleRole(user)" class="btn btn-warning"
                                         tooltip-placement="left"
-                                        tooltip="Will make {{user.name}} an Admin user">Add to Admins
+                                        tooltip="Add {{user.name}} to Admins group">Add to Admins
+                                </button>
+                            </td>
+                            <td>
+                                <button ng-click="ctrl.changeUserPasswordModal(user.name)" class="btn btn-primary"
+                                        tooltip-placement="top"
+                                        tooltip="Changes {{user.name}}'s password">Change Password
                                 </button>
                             </td>
                             <td>
                                 <button ng-click="ctrl.removeUser(user)" class="btn btn-danger"
                                         tooltip-placement="right"
-                                        tooltip="Will remove {{user.name}} and all it's settings as well.">remove
+                                        tooltip="Remove {{user.name}} and all it's settings as well.">remove
                                 </button>
                             </td>
                         </tr>

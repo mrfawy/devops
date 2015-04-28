@@ -47,6 +47,14 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
                 $log.error("Token Can't contain spaces")
                 return;
             }
+            //check if token exists
+            for(var i=0;i<$scope.tokens.length;i++){
+                if($scope.tokens[i].token==ctrl.newToken){
+                    toasterService.showWarning("Create Token", "Token already exists in current context, please check token filter");
+                    $log.error("Token already exist")
+                    return;
+                }
+            }
             if ($scope.env == null || $scope.app == null) {
                 toasterService.showWarning("Create Token", "Please select Environment and Application first");
                 $log.error("Please select Environment and App first")

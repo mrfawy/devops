@@ -79,6 +79,16 @@ class AuthenticationService {
         usersCollection.findOneAndReplace(doc,userDoc)
         return true
     }
+    def changeUserPassword(userName,password){
+        MongoDatabase database=loadDB()
+        MongoCollection<Document> usersCollection=database.getCollection(COLLECTION_USERS)
+        Document filter = new Document("name", userName)
+        Document updateDoc=new Document("\$set", new Document("password", password))
+        def userDoc=usersCollection.updateOne(filter,updateDoc);
+
+
+
+    }
     def removeUser(userName){
         MongoDatabase database=loadDB()
         MongoCollection<Document> usersCollection=database.getCollection(COLLECTION_USERS)

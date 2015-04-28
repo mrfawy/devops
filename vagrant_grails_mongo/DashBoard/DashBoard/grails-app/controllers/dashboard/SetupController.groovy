@@ -47,6 +47,10 @@ class SetupController {
         def result=authenticationService.registerUser(user.userName,user.password,"user")
 
     }
+    def changeUserPassword(){
+        def result=authenticationService.changeUserPassword(params.userName,params.password)
+        render ControllerResponse.success() as JSON
+    }
     def assignUsertoRole(){
         authenticationService.assignUserRole(params.user,params.role)
         render ControllerResponse.success() as JSON

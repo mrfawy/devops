@@ -15,6 +15,8 @@ class AuthenticationController {
             session.userName=params.userName
             if(user.get("role")=="admin"){
                 session.isAdmin=true
+                redirect(controller: 'admin', action: 'index')
+                return
             }
             redirect(controller: 'settings', action: 'index')
 
@@ -35,6 +37,10 @@ class AuthenticationController {
 
     }
     def register(){
+        if(params.userName.contains(" ")){
+            request.error="User name can't have spaces ."
+            render(view: "index")
+        }
         def result=authenticationService.registerUser(params.userName,params.password,"user")
         if(result){
             redirect(controller: 'settings', action: 'index')
