@@ -11,10 +11,14 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
         loadService.loadData("envs")
             .success(function(data, status, headers) {
                 ctrl.envs = data;
+            }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
             });
         loadService.loadData("apps")
             .success(function(data, status, headers) {
                 ctrl.apps = data;
+            }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
             });
         ctrl.loadTokens = function() {
             if ($scope.env != null && $scope.app != null) {
@@ -27,6 +31,8 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
                             ctrl.showAllTokens(false);
                         }
 
+                    }).error(function(data, status, headers, config) {
+                        toasterService.showError("Service Error", data);
                     });
             }
 
@@ -48,8 +54,8 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
                 return;
             }
             //check if token exists
-            for(var i=0;i<$scope.tokens.length;i++){
-                if($scope.tokens[i].token==ctrl.newToken){
+            for (var i = 0; i < $scope.tokens.length; i++) {
+                if ($scope.tokens[i].token == ctrl.newToken) {
                     toasterService.showWarning("Create Token", "Token already exists in current context, please check token filter");
                     $log.error("Token already exist")
                     return;
@@ -68,6 +74,8 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
                     ctrl.loadTokens();
                     ctrl.newToken = null;
                     ctrl.tokenCreationMode = false;
+                }).error(function(data, status, headers, config) {
+                    toasterService.showError("Service Error", data);
                 });
 
         }

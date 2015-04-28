@@ -11,7 +11,9 @@ module.controller('AdminAppController', ['$scope', '$log', 'ToasterService', 'ap
                 function(data, status, headers) {
 
                     ctrl.apps = data;
-                });
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
         };
         ctrl.reset = function() {
             ctrl.newApp = {}
@@ -82,13 +84,17 @@ module.controller('AdminAppController', ['$scope', '$log', 'ToasterService', 'ap
                     $log.info("app created successfully");
                     ctrl.createAppMode = false;
                     ctrl.refresh();
-                });
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
         }
         ctrl.removeApp = function(appName) {
             appService.removeApp(appName).success(function(data, status, headers) {
                 toasterService.showSuccess("Remove Application", "Application " + appName + " is removed successfully");
                 $log.info("app removed successfully");
                 ctrl.refresh();
+            }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
             });
         }
         ctrl.refresh();

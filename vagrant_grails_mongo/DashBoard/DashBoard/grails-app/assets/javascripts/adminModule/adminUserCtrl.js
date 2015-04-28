@@ -1,6 +1,6 @@
 var module = angular.module('dashBoard.adminModule');
-module.controller('AdminUserController', ['$scope', '$log','$modal', 'ToasterService', 'userService',
-    function($scope, $log,$modal, toasterService, userService) {
+module.controller('AdminUserController', ['$scope', '$log', '$modal', 'ToasterService', 'userService',
+    function($scope, $log, $modal, toasterService, userService) {
         var ctrl = this;
 
         ctrl.refresh = function() {
@@ -15,7 +15,9 @@ module.controller('AdminUserController', ['$scope', '$log','$modal', 'ToasterSer
                         ctrl.userNames.push(userName)
                     }
                     ctrl.countOwnedTokens(adminUserNames)
-                });
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
             userService.loadUsers("user").success(
                 function(data, status, headers) {
                     ctrl.normalUsers = data;
@@ -26,7 +28,9 @@ module.controller('AdminUserController', ['$scope', '$log','$modal', 'ToasterSer
                         ctrl.userNames.push(userName)
                     }
                     ctrl.countOwnedTokens(normalUserNames)
-                });
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
         };
         ctrl.countOwnedTokens = function(ownerList) {
             userService.countOwnedTokens(ownerList).success(
@@ -41,7 +45,9 @@ module.controller('AdminUserController', ['$scope', '$log','$modal', 'ToasterSer
                         }
                     }
 
-                });
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
         }
         ctrl.toggleRole = function(user) {
             var role = user.role;
@@ -59,7 +65,8 @@ module.controller('AdminUserController', ['$scope', '$log','$modal', 'ToasterSer
                 function(data, status, headers) {
                     toasterService.showInfo("Toggle Role", "User " + user.name + "'s" + " role is toggled successfully");
                     ctrl.refresh();
-                });
+                }).error(function(data, status, headers, config) {
+                                  toasterService.showError("Service Error", data);
 
         }
 
@@ -73,6 +80,8 @@ module.controller('AdminUserController', ['$scope', '$log','$modal', 'ToasterSer
                 $log.info("user removed successfully");
                 toasterService.showSuccess("Remove User", "Removed User " + user.name + " successfully");
                 ctrl.refresh();
+            }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
             });
         }
 
@@ -115,8 +124,10 @@ module.controller('AdminUserController', ['$scope', '$log','$modal', 'ToasterSer
             }
             userService.changeUserPassword(userName, password).success(
                 function(data, status, headers) {
-                    toasterService.showSuccess("Change Password", "Changed password successfully for user  " + userName );
-                });
+                    toasterService.showSuccess("Change Password", "Changed password successfully for user  " + userName);
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
         };
         ctrl.refresh();
     }

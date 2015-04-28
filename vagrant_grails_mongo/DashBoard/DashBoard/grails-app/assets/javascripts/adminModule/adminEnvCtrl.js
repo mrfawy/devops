@@ -8,7 +8,9 @@ module.controller('AdminEnvController', ['$scope', '$log', 'ToasterService', 'en
                 function(data, status, headers) {
 
                     ctrl.envs = data;
-                });
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
 
         };
         ctrl.envCreationMode = false;
@@ -20,9 +22,9 @@ module.controller('AdminEnvController', ['$scope', '$log', 'ToasterService', 'en
                 toasterService.showWarning("Environment", "Environment name is missing.")
                 return;
             }
-            if(env.indexOf(" ")>0){
-            toasterService.showWarning("Environment", "Environment name can't contain spaces.")
-                            return;
+            if (env.indexOf(" ") > 0) {
+                toasterService.showWarning("Environment", "Environment name can't contain spaces.")
+                return;
             }
             envService.createEnv(env).success(
                 function(data, status, headers) {
@@ -31,13 +33,17 @@ module.controller('AdminEnvController', ['$scope', '$log', 'ToasterService', 'en
                     ctrl.envCreationMode = false;
                     ctrl.newEnv = null;
                     ctrl.refresh();
-                });
+                }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
+            });
         }
         ctrl.removeEnv = function(env) {
             envService.removeEnv(env).success(function(data, status, headers) {
                 toasterService.showSuccess("Environment", "Environment " + env + " removed successfully")
                 $log.info("env removed successfully");
                 ctrl.refresh();
+            }).error(function(data, status, headers, config) {
+                toasterService.showError("Service Error", data);
             });
         }
         ctrl.refresh();

@@ -13,7 +13,9 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
 
                 $log.info("owner: " + $scope.owner)
                 $log.info("isAdmin: " + $scope.isAdmin)
-            });
+            }).error(function(data, status, headers, config) {
+            toasterService.showError("Service Error", data);
+        });
 
         ctrl.refresh = function() {
             settingsService.loadSettings($scope.env, $scope.app, $scope.token)
@@ -29,6 +31,8 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
                     }
                     $scope.editable = false;
 
+                }).error(function(data, status, headers, config) {
+                    toasterService.showError("Service Error", data);
                 });
         };
 
@@ -53,6 +57,8 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
                     $log.info("saved Settings successfully");
                     $scope.editable = false;
 
+                }).error(function(data, status, headers, config) {
+                    toasterService.showError("Service Error", data);
                 });
         };
         ctrl.clone = function(o) {
@@ -93,6 +99,8 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
                 servicePropertiesValuesService.loadServiceProperties(app, service)
                     .success(function(data, status, headers) {
                         ctrl.propertyValues.values = data
+                    }).error(function(data, status, headers, config) {
+                        toasterService.showError("Service Error", data);
                     });
             } else {
                 if (ctrl.propertyValues.service != service || ctrl.propertyValues.app != app) {
@@ -102,6 +110,8 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
                     servicePropertiesValuesService.loadServiceProperties(app, service)
                         .success(function(data, status, headers) {
                             ctrl.propertyValues.values = data
+                        }).error(function(data, status, headers, config) {
+                            toasterService.showError("Service Error", data);
                         });
                 }
                 //else do nothing
@@ -124,7 +134,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
             if ($scope.selectedToken) {
                 var modalInstance = $modal.open({
                     templateUrl: '/assets/settingsModule/exportSettingsTemplate.html',
-                    controller: function($scope, $modalInstance, token,settings) {
+                    controller: function($scope, $modalInstance, token, settings) {
                         $scope.token = token;
                         $scope.settings = settings;
                         $scope.suggestedFileName = token.env + "_" + token.app + "_" + token.token + ".json"
@@ -141,7 +151,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
                             return $scope.selectedToken;
                         },
                         settings: function() {
-                                                    return ctrl.settings;
+                            return ctrl.settings;
                         }
 
                     }
@@ -177,7 +187,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
                 $scope.importedTokenJsonStr = importedTokenJsonStr;
                 $log.info('Modal dismissed with : ' + $scope.importedTokenJsonStr);
                 $log.info("merging ......")
-                ctrl.merge(ctrl.settings,$scope.importedTokenJsonStr)
+                ctrl.merge(ctrl.settings, $scope.importedTokenJsonStr)
             }, function() {
                 $log.info('Modal dismissed at: ' + new Date());
             });
@@ -196,7 +206,7 @@ module.controller('SettingsEditorCtrl', ['$scope', '$log', '$modal', 'ToasterSer
             try {
                 //match service name
                 for (var i = 0; i < targetToken.services.length; i++) {
-                    for (var j = 0; j < sourceToken.services.length;j++) {
+                    for (var j = 0; j < sourceToken.services.length; j++) {
                         //matching service found
                         if (targetToken.services[i].name === sourceToken.services[j].name) {
                             $log.info("matching service found : " + targetToken.services[i].name)
