@@ -11,7 +11,7 @@ class SecurityInterceptor implements Interceptor,Controller {
 
 
     SecurityInterceptor() {
-        matchAll().excludes(controller:"authentication")
+        matchAll().excludes(controller:"authentication").excludes (controller:"appPortal")
 
     }
 

@@ -158,6 +158,20 @@ class SettingsService {
         }
         return result
     }
+    def retrieveAppTemplate(appName){
+        MongoDatabase database=loadDB()
+        MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
+        Document query = new Document("name",appName)
+        def cursor=appsCollection.find(query).projection(Projections.excludeId()).iterator()
+        def template=(cursor.hasNext())?cursor.next():null
+        if(template){
+            def slurper=new JsonSlurper()
+            template=slurper.parseText(template.toJson())
+            template=template.services
+        }
+        return template
+
+    }
     def generateTokenSettingsForApp(env,app,token,owner){
         MongoDatabase database=loadDB()
         MongoCollection<Document> appsCollection=database.getCollection(COLLECTION_APPS)
@@ -180,7 +194,7 @@ class SettingsService {
         BasicDBObject query = new BasicDBObject("env",env)
         query.append("app",app)
 
-        def cursor = appsCollection.find(query).projection(Projections.excludeId()).sort {}.iterator()
+        def cursor = appsCollection.find(query).projection(Projections.excludeId()).sort {token:1}.iterator()
         def result=[]
         def slurper=new JsonSlurper()
         while(cursor.hasNext()){
@@ -191,7 +205,7 @@ class SettingsService {
     }
 
 
-    def loadTokenSettings(env,app,token) {
+    def loadTokenSettings(env,app,token,service=null) {
         MongoDatabase database=loadDB()
         MongoCollection stgCollection=database.getCollection(COLLECTION_USER_SETTINGSS)
         BasicDBObject query = new BasicDBObject("env",env)
@@ -199,6 +213,22 @@ class SettingsService {
         query.append("token",token)
         def cursor = stgCollection.find(query).projection(Projections.excludeId()).iterator()
         def item = cursor.hasNext() ? cursor.next() : null;
+        if(item){
+            def slurper=new JsonSlurper()
+            item=slurper.parseText(item.toJson())
+
+            if(service){
+                def result=null
+                item.services.each{
+                    if(it.name==service){
+                        result=it
+                        return
+                    }
+                }
+                return result
+
+            }
+        }
         return item
 
     }

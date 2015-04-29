@@ -20,6 +20,9 @@ class ControllerResponse {
     static authorizationError(){
         return new ControllerResponse(code: INVALID_AUTH,status: "Error",message: "Invalid Authorization, please login first")
     }
+    static authorizationAPIError(){
+        return new ControllerResponse(code: INVALID_AUTH,status: "Error",message: "Invalid Authorization, please check authentication section in request")
+    }
 
 
 }

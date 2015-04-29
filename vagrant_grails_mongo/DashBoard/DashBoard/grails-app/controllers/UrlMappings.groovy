@@ -24,6 +24,11 @@ class UrlMappings {
         "/analytics/values/$app/$service/$property?" (controller:"analytics" , action:"retrieveStoredValuesForProperty")
         "/analytics/countOwnedTokens" (controller:"analytics" , action:[POST:"countOwnedTokens"])
 
+        //API for Client Apps
+        "/api/settings/$env/$app/$token/$service?" (controller:"AppPortal" , action : "loadTokenSettings")
+        "/api/settings/default/$env/$app/" (controller:"AppPortal" , action : [ POST:"createDefaultTokenSettings"])
+        "/api/settings/template/$app/" (controller:"AppPortal" , action : [ GET:"retrieveAppTemplate"])
+
 
         "/$controller/$action?/$id?(.$format)?"{
             constraints {
