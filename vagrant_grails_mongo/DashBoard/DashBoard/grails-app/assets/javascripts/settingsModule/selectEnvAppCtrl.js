@@ -24,12 +24,10 @@ module.controller('SelectEnvAppCtrl', ['$scope', '$log', 'ToasterService', 'load
             if ($scope.env != null && $scope.app != null) {
                 tokenService.loadTokens($scope.env, $scope.app)
                     .success(function(data, status, headers) {
-                        $scope.token = null;
-                        if (data.length > 0) {
-                            $scope.tokens = data;
-                            //filter tokens to owner only
-                            ctrl.showAllTokens(false);
-                        }
+                        $scope.tokens = null;
+                        $scope.tokens = data;
+                        //filter tokens to owner only
+                        ctrl.showAllTokens(false);
 
                     }).error(function(data, status, headers, config) {
                         toasterService.showError("Service Error", data);

@@ -1,7 +1,7 @@
 <div class="container">
     <h3>Information for application developers </h3>
 
-    <p> Coming soon </p>
+    <p> Please check the following services to integrate your application with Dashboard </p>
 
     <div class="row">
         <div class="col-xs-12">
@@ -360,7 +360,7 @@
 
                                                     <td>
                                                         <code>[{"name":"RetrieveAccounts","properties":[{"name":"Region","value":""}]},{"name":"paymentHistory","properties":[{"name":"DataBase","value":""}]}]
-                                                            List of services and their properties defined for this app .</code>
+                                                        </code>
                                                     </td>
                                                 </tr>
                                                 <tr>

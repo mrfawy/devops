@@ -52,6 +52,9 @@
     <asset:javascript src="/adminModule/adminAppCtrl.js"/>
     <asset:javascript src="/adminModule/adminUserCtrl.js"/>
 
+    <asset:javascript src="/helpModule/helpModule.js"/>
+    <asset:javascript src="/helpModule/helpCtrl.js"/>
+
     <g:layoutHead/>
 </head>
 <body>

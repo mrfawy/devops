@@ -1,1 +1,1 @@
-var app=angular.module('dashBoardApp', ['dashBoard.settingsModule','dashBoard.adminModule','toaster','ui.bootstrap']);
+var app=angular.module('dashBoardApp', ['dashBoard.settingsModule','dashBoard.adminModule','dashBoard.helpModule','toaster','ui.bootstrap']);
