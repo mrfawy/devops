@@ -29,3 +29,17 @@
       text-align: center;
       width: 50%;
 }
+
+
+.x h3
+{
+text-shadow:5px 3px 0 rgba(NaN,NaN,NaN,1);
+font-weight:normal;
+color:#1E0AA3;
+letter-spacing:1pt;
+word-spacing:2pt;
+font-size:20px;
+text-align:left;
+font-family:times new roman, times, serif;
+line-height:1;
+}

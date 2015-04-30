@@ -41,7 +41,7 @@ class AppPortalController {
             render ControllerResponse.authorizationAPIError() as JSON
             return
         }
-        def appTemplateSettings=settingsService.retreiveAppTemplate(params.app)
+        def appTemplateSettings=settingsService.retrieveAppTemplate(params.app)
         def isMatching=isMatchingTemplate(appTemplateSettings,req.services)
         if(!isMatching){
             response.status = 500

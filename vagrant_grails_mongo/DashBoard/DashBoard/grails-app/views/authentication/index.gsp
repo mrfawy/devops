@@ -52,6 +52,7 @@
                         <g:actionSubmit
                             value="Register" action="register"
                             class="btn btn-success btn-md" />
+                        <g:link controller="help">Need help ?</g:link>
                     </tr>
                 </table>
             </div>
