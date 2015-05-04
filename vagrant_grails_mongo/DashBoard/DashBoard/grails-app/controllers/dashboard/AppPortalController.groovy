@@ -13,9 +13,9 @@ class AppPortalController {
         def result = settingsService.loadTokenSettings(params.env, params.app, params.token, params.service)
 
         if (!result) {
+            response.status=500
             render ControllerResponse.noRecords() as JSON
         } else {
-            response.status = 500
             render result as JSON
         }
 
@@ -24,6 +24,7 @@ class AppPortalController {
     def retrieveAppTemplate(){
         def appTemplateSettings=settingsService.retrieveAppTemplate(params.app)
         if(!appTemplateSettings){
+            response.status=500
             render ControllerResponse.noRecords() as JSON
             return
         }
@@ -42,7 +43,7 @@ class AppPortalController {
             return
         }
         def appTemplateSettings=settingsService.retrieveAppTemplate(params.app)
-        def isMatching=isMatchingTemplate(appTemplateSettings,req.services)
+        def isMatching=isMatchingTemplate(appTemplateSettings.services,req.services)
         if(!isMatching){
             response.status = 500
             render new ControllerResponse(code: "0002",status: "Matching app template failed ",message: "Application Settings template are not matching with your request ") as JSON

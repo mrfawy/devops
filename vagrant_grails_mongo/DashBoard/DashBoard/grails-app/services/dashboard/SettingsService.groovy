@@ -167,7 +167,6 @@ class SettingsService {
         if(template){
             def slurper=new JsonSlurper()
             template=slurper.parseText(template.toJson())
-            template=template.services
         }
         return template
 
